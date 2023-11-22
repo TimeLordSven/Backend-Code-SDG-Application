@@ -1,17 +1,19 @@
 package com.example.feedbacktoolbackend.config;
 
-import org.apache.catalina.filters.CorsFilter;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
 @Configuration
 public class CorsConfig {
 
     @Bean
-    public CorsFilter(){
+    public CorsFilter CorsFilter(){
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        Corsconfiguration config = new CorsConfiguration();
+        CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowCredentials(true);
         config.addAllowedOrigin("http://localhost:4200");
