@@ -24,7 +24,15 @@ public class UserService {
     }
 
     public UserBusiness createUser(AuthenticationDTO authenticationDTO) {
-        UserBusiness userBusiness = new UserBusiness(authenticationDTO.firstName(), authenticationDTO.prefixes(), authenticationDTO.lastName(), authenticationDTO.email(), passwordEncoderService.encodePassword(authenticationDTO.password()), Role.valueOf(authenticationDTO.role()));
+        UserBusiness userBusiness = new UserBusiness(
+                authenticationDTO.firstName(),
+                authenticationDTO.prefixes(),
+                authenticationDTO.lastName(),
+                authenticationDTO.email(),
+                passwordEncoderService.encodePassword(authenticationDTO.password()),
+                Role.valueOf(authenticationDTO.role())
+        );
+
         if (userBusiness.hasValidEmail()) {
             if (repository.existsByEmail(userBusiness.getEmail())) {
                 throw new EntityExistsException("User already exists");
@@ -49,6 +57,9 @@ public class UserService {
     }
 
     private UserBusiness convertToUserBusiness(User userEntity) {
+        if (userEntity == null) {
+                        throw new IllegalArgumentException("UserEntity is null");
+        }
         return new UserBusiness(
                 userEntity.getId(),
                 userEntity.getFirstName(),
