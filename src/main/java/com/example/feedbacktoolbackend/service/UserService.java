@@ -7,7 +7,6 @@ import com.example.feedbacktoolbackend.data.UserRepository;
 import com.example.feedbacktoolbackend.data.Models.User;
 import com.example.feedbacktoolbackend.enums.Role;
 import com.example.feedbacktoolbackend.service.models.UserBusiness;
-import jakarta.persistence.EntityExistsException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
