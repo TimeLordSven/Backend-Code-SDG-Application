@@ -79,8 +79,19 @@ public class UserBusiness {
         return email != null && email.matches("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$");
     }
 
+
     public boolean hasRole(Role expectedRole) {
         return this.role.equals(expectedRole);
     }
+
+    private String getFullName() {
+        return String.format("%s %s %s", firstName, prefixes != null && !prefixes.isBlank() ? prefixes : "", lastName);
+    }
+
+    public boolean hasValidName() {
+        String fullName = getFullName();
+        return fullName.matches("^[a-zA-Z ]+$");
+    }
+
 
 }
