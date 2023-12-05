@@ -36,7 +36,7 @@ public class UserService {
                 authenticationDTO.lastName(),
                 authenticationDTO.email(),
                 passwordEncoderService.encodePassword(password),
-                Role.valueOf(authenticationDTO.role())
+                Role.STUDENT
         );
 
         if (!userBusiness.hasValidName()) {
