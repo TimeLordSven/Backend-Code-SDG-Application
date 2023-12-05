@@ -1,10 +1,14 @@
 package com.example.feedbacktoolbackend.serviceTests;
+/*
+  @Author Sven Molenaar
+ */
 
 import com.example.feedbacktoolbackend.controller.dto.AuthenticationDTO;
 import com.example.feedbacktoolbackend.controller.exception.*;
 import com.example.feedbacktoolbackend.service.UserService;
 import com.example.feedbacktoolbackend.service.models.UserBusiness;
 import jakarta.transaction.Transactional;
+import jdk.jfr.Description;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +22,7 @@ public class UserServiceTest {
     private UserService userService;
 
     @Test
+    @Description("Successful registration with valid user details.")
     void testRegistrationValidEverything() {
         AuthenticationDTO dto = new AuthenticationDTO(
                 "Abraham",
@@ -25,12 +30,13 @@ public class UserServiceTest {
                 "Helsing",
                 "VanHelsing@Hva.com",
                 "Password123!",
-                "Password123!",
-                "STUDENT");
+                "Password123!"
+        );
         UserBusiness user = userService.createUser(dto);
         Assertions.assertNotNull(user);
     }
     @Test
+    @Description("Registration failure due to an invalid first name.")
     void testRegistrationInvalidFirstName() {
         AuthenticationDTO authenticationDTO = new AuthenticationDTO(
                 "Abraham1",
@@ -38,12 +44,14 @@ public class UserServiceTest {
                 "Helsing",
                 "VanHelsing@Hva.com",
                 "Password123!",
-                "Password123!",
-                "STUDENT"
+                "Password123!"
+
         );
         assertThrows(InvalidInputException.class, () -> userService.createUser(authenticationDTO));
     }
     @Test
+    @Description("Registration failure due to an invalid prefix.")
+
     void testRegistrationInvalidPrefix() {
         AuthenticationDTO authenticationDTO = new AuthenticationDTO(
                 "Abraham",
@@ -51,12 +59,12 @@ public class UserServiceTest {
                 "Helsing",
                 "VanHelsing@Hva.com",
                 "Password123!",
-                "Password123!",
-                "STUDENT"
+                "Password123!"
         );
         assertThrows(InvalidInputException.class, () -> userService.createUser(authenticationDTO));
     }
     @Test
+    @Description("Registration failure due to an invalid last name.")
     void testRegistrationInvalidLastName() {
         AuthenticationDTO authenticationDTO = new AuthenticationDTO(
                 "Abraham",
@@ -64,12 +72,12 @@ public class UserServiceTest {
                 "Helsing40",
                 "VanHelsing@Hva.cem",
                 "Password123!",
-                "Password123!",
-                "STUDENT"
+                "Password123!"
         );
         assertThrows(InvalidInputException.class, () -> userService.createUser(authenticationDTO));
     }
     @Test
+    @Description("Registration failure due to an invalid email format.")
     void testRegistrationInvalidEmail() {
         AuthenticationDTO authenticationDTO = new AuthenticationDTO(
                 "Abraham",
@@ -77,12 +85,12 @@ public class UserServiceTest {
                 "Helsing",
                 "VanHelsing@Hvadem",
                 "Password123!",
-                "Password123!",
-                "STUDENT"
+                "Password123!"
         );
         assertThrows(InvalidInputException.class, () -> userService.createUser(authenticationDTO));
     }
     @Test
+    @Description("Registration failure due to an invalid password.")
     void testRegistrationInvalidPassword() {
         AuthenticationDTO authenticationDTO = new AuthenticationDTO(
                 "Abraham",
@@ -90,12 +98,12 @@ public class UserServiceTest {
                 "Helsing",
                 "VanHelsing@Hva.com",
                 "Pass!",
-                "Password123!",
-                "STUDENT"
+                "Password123!"
         );
         assertThrows(InvalidInputException.class, () -> userService.createUser(authenticationDTO));
     }
     @Test
+
     void testRegistrationInvalidVerifyPassword() {
         AuthenticationDTO authenticationDTO = new AuthenticationDTO(
                 "Abraham",
@@ -103,8 +111,7 @@ public class UserServiceTest {
                 "Helsing",
                 "VanHelsing@Hva.com",
                 "Password123!",
-                "Pa!",
-                "STUDENT"
+                "Pa!"
         );
         assertThrows(InvalidInputException.class, () -> userService.createUser(authenticationDTO));
     }
