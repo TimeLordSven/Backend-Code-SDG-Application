@@ -22,7 +22,15 @@ public class UserService {
         this.passwordEncoderService = passwordEncoderService;
         this.repository = repository;
     }
-
+    /**
+     * Creates a new user based on the provided authentication data.
+     * Validates input and checks for existing users before creation.
+     * @author Sven Molenaar
+     * @param authenticationDTO Authentication data to create a user
+     * @return UserBusiness object representing the created user
+     * @throws AlreadyExistsException if a user with the provided email already exists
+     * @throws InvalidInputException if input data is invalid or doesn't match criteria
+     */
     public UserBusiness createUser(AuthenticationDTO authenticationDTO) throws AlreadyExistsException, InvalidInputException {
         String password = authenticationDTO.password();
 
@@ -58,7 +66,12 @@ public class UserService {
         return convertToUserBusiness(repository.save(convertToUserEntity(userBusiness)));
     }
 
-
+    /**
+     * Converts a UserBusiness object to a User entity.
+     * @author Sven Molenaar
+     * @param userBusiness UserBusiness object to convert
+     * @return User entity
+     */
     private User convertToUserEntity(UserBusiness userBusiness) {
         User user = new User();
         user.setId(userBusiness.getId());
@@ -70,7 +83,13 @@ public class UserService {
         user.setRole(userBusiness.getRole());
         return user;
     }
-
+    /**
+     * Converts a User entity to a UserBusiness object.
+     * @author Sven Molenaar
+     * @param userEntity User entity to convert
+     * @return UserBusiness object
+     * @throws IllegalArgumentException if the provided User entity is null
+     */
     private UserBusiness convertToUserBusiness(User userEntity) {
         if (userEntity == null) {
             throw new IllegalArgumentException("UserEntity is null");
