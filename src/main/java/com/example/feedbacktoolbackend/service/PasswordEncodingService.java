@@ -19,7 +19,8 @@ public class PasswordEncodingService {
      */
     public PasswordEncodingService() {
         passwordEncoder = new BCryptPasswordEncoder();
-        passwordRegex = "^(?=.*[!@#$%^&*()-_=+\\\\|\\[{\\]}])(.{8,})$";
+        passwordRegex = "^(?=.*[!@#$%^&*()-_=+\\\\|\\[{\\]}])(?=.*[a-zA-Z0-9]).{8,}$";
+
     }
 
     /**

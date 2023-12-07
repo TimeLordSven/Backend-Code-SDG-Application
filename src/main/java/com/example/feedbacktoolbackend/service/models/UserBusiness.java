@@ -84,13 +84,23 @@ public class UserBusiness {
         return this.role.equals(expectedRole);
     }
 
-    private String getFullName() {
-        return String.format("%s %s %s", firstName, prefixes != null && !prefixes.isBlank() ? prefixes : "", lastName);
-    }
 
     public boolean hasValidName() {
         String fullName = getFullName();
         return fullName.matches("^[a-zA-Z ]+$");
+    }
+    private String getFullName() {
+        boolean hasFirstName = firstName != null && !firstName.isEmpty();
+        boolean hasPrefixes = prefixes != null && !prefixes.isEmpty();
+        boolean hasLastName = lastName != null && !lastName.isEmpty();
+
+        if (hasFirstName && hasLastName) {
+            String prefixString = hasPrefixes ? prefixes + " " : "";
+
+            return String.format("%s%s%s", firstName, prefixString, lastName);
+        }
+
+        return "";
     }
 
 
