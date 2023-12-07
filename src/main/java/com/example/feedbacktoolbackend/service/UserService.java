@@ -22,6 +22,7 @@ public class UserService {
         this.passwordEncoderService = passwordEncoderService;
         this.repository = repository;
     }
+
     /**
      * Creates a new user based on the provided authentication data.
      * Validates input and checks for existing users before creation.
@@ -32,18 +33,43 @@ public class UserService {
      * @throws InvalidInputException if input data is invalid or doesn't match criteria
      */
     public UserBusiness createUser(AuthenticationDTO authenticationDTO) throws AlreadyExistsException, InvalidInputException {
-        String password = authenticationDTO.password();
+        validatePasswords(authenticationDTO.password(), authenticationDTO.verifyPassword());
+        UserBusiness userBusiness = createUserBusinessFromDTO(authenticationDTO);
+        validateUser(userBusiness);
+        return convertToUserBusiness(repository.save(convertToUserEntity(userBusiness)));
+    }
 
-        if (!password.equals(authenticationDTO.verifyPassword())) {
+    /**
+     * Validates the passwords provided in the authentication data.
+     * @author Sven molenaar
+     * @param password        The password to validate
+     * @param verifyPassword  The password to verify against
+     * @throws InvalidInputException if passwords do not match or if the password is invalid
+     */
+    private void validatePasswords(String password, String verifyPassword) throws InvalidInputException {
+        if (!password.equals(verifyPassword)) {
             throw new InvalidInputException("Passwords do not match");
         }
 
+        if (!passwordEncoderService.validatePassword(password)) {
+            throw new InvalidInputException("Invalid Password");
+        }
+    }
+
+    /**
+     * Creates a UserBusiness object from the provided AuthenticationDTO and validates name and email.
+     * @author Sven Molenaar
+     * @param authenticationDTO Authentication data to create a user
+     * @return UserBusiness object representing the user from the DTO
+     * @throws InvalidInputException if name or email is invalid
+     */
+    private UserBusiness createUserBusinessFromDTO(AuthenticationDTO authenticationDTO) throws InvalidInputException {
         UserBusiness userBusiness = new UserBusiness(
                 authenticationDTO.firstName(),
                 authenticationDTO.prefixes(),
                 authenticationDTO.lastName(),
                 authenticationDTO.email(),
-                passwordEncoderService.encodePassword(password),
+                passwordEncoderService.encodePassword(authenticationDTO.password()),
                 Role.STUDENT
         );
 
@@ -51,19 +77,23 @@ public class UserService {
             throw new InvalidInputException("Name can only contain alphabetical letters");
         }
 
-        if (!passwordEncoderService.validatePassword(password)) {
-            throw new InvalidInputException("Invalid Password");
-        }
-
         if (!userBusiness.hasValidEmail()) {
             throw new InvalidInputException(userBusiness.getEmail() + " is not a valid email");
         }
 
+        return userBusiness;
+    }
+
+    /**
+     * Validates if a user with the same email already exists.
+     * @author Sven Molenaar
+     * @param userBusiness The UserBusiness object to check for existing email
+     * @throws AlreadyExistsException if a user with the same email already exists
+     */
+    private void validateUser(UserBusiness userBusiness) throws AlreadyExistsException {
         if (repository.existsByEmail(userBusiness.getEmail())) {
             throw new AlreadyExistsException("User");
         }
-
-        return convertToUserBusiness(repository.save(convertToUserEntity(userBusiness)));
     }
 
     /**
