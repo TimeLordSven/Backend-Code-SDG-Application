@@ -91,7 +91,7 @@ public class UserBusiness {
     }
     private String getFullName() {
         boolean hasFirstName = firstName != null && !firstName.isEmpty();
-        boolean hasPrefixes = prefixes != null && !prefixes.isEmpty();
+        boolean hasPrefixes = !prefixes.isEmpty();
         boolean hasLastName = lastName != null && !lastName.isEmpty();
 
         if (hasFirstName && hasLastName) {
