@@ -4,6 +4,6 @@ package com.example.feedbacktoolbackend.controller.dto;
  * This record encapsulates user data, providing a concise and immutable representation.
  * @author Sven Molenaar
  */
-public record AuthenticationDTO(String firstName, String prefixes, String lastName, String email, String password, String verifyPassword) {
+public record RegistrationDTO(String firstName, String prefixes, String lastName, String email, String password, String verifyPassword) {
 
 }

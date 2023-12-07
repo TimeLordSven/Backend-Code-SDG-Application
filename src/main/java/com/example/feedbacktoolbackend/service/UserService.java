@@ -1,6 +1,6 @@
 package com.example.feedbacktoolbackend.service;
 
-import com.example.feedbacktoolbackend.controller.dto.AuthenticationDTO;
+import com.example.feedbacktoolbackend.controller.dto.RegistrationDTO;
 import com.example.feedbacktoolbackend.controller.exception.AlreadyExistsException;
 import com.example.feedbacktoolbackend.controller.exception.InvalidInputException;
 import com.example.feedbacktoolbackend.data.UserRepository;
@@ -27,14 +27,14 @@ public class UserService {
      * Creates a new user based on the provided authentication data.
      * Validates input and checks for existing users before creation.
      * @author Sven Molenaar
-     * @param authenticationDTO Authentication data to create a user
+     * @param registrationDTO Authentication data to create a user
      * @return UserBusiness object representing the created user
      * @throws AlreadyExistsException if a user with the provided email already exists
      * @throws InvalidInputException if input data is invalid or doesn't match criteria
      */
-    public UserBusiness createUser(AuthenticationDTO authenticationDTO) throws AlreadyExistsException, InvalidInputException {
-        validatePasswords(authenticationDTO.password(), authenticationDTO.verifyPassword());
-        UserBusiness userBusiness = createUserBusinessFromDTO(authenticationDTO);
+    public UserBusiness createUser(RegistrationDTO registrationDTO) throws AlreadyExistsException, InvalidInputException {
+        validatePasswords(registrationDTO.password(), registrationDTO.verifyPassword());
+        UserBusiness userBusiness = createUserBusinessFromDTO(registrationDTO);
         validateUser(userBusiness);
         return convertToUserBusiness(repository.save(convertToUserEntity(userBusiness)));
     }
@@ -57,19 +57,19 @@ public class UserService {
     }
 
     /**
-     * Creates a UserBusiness object from the provided AuthenticationDTO and validates name and email.
+     * Creates a UserBusiness object from the provided RegistrationDTO and validates name and email.
      * @author Sven Molenaar
-     * @param authenticationDTO Authentication data to create a user
+     * @param registrationDTO Authentication data to create a user
      * @return UserBusiness object representing the user from the DTO
      * @throws InvalidInputException if name or email is invalid
      */
-    private UserBusiness createUserBusinessFromDTO(AuthenticationDTO authenticationDTO) throws InvalidInputException {
+    private UserBusiness createUserBusinessFromDTO(RegistrationDTO registrationDTO) throws InvalidInputException {
         UserBusiness userBusiness = new UserBusiness(
-                authenticationDTO.firstName(),
-                authenticationDTO.prefixes(),
-                authenticationDTO.lastName(),
-                authenticationDTO.email(),
-                passwordEncoderService.encodePassword(authenticationDTO.password()),
+                registrationDTO.firstName(),
+                registrationDTO.prefixes(),
+                registrationDTO.lastName(),
+                registrationDTO.email(),
+                passwordEncoderService.encodePassword(registrationDTO.password()),
                 Role.STUDENT
         );
 

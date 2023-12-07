@@ -1,6 +1,6 @@
 package com.example.feedbacktoolbackend.controller;
 
-import com.example.feedbacktoolbackend.controller.dto.AuthenticationDTO;
+import com.example.feedbacktoolbackend.controller.dto.RegistrationDTO;
 import com.example.feedbacktoolbackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,14 +34,14 @@ public class UserController {
 
     /**
      * Endpoint to create a new student user.
-     * Receives an AuthenticationDTO from the request body.
+     * Receives an RegistrationDTO from the request body.
      * Calls the UserService to create a new user.
      * @author Sven Molenaar
-     * @param requestBody AuthenticationDTO object containing user data
+     * @param requestBody RegistrationDTO object containing user data
      * Returns ResponseEntity with CREATED status
      */
     @PostMapping
-    public ResponseEntity<Object> createUser(@RequestBody AuthenticationDTO requestBody) {
+    public ResponseEntity<Object> createUser(@RequestBody RegistrationDTO requestBody) {
         userService.createUser(requestBody);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
