@@ -25,26 +25,28 @@ public class PasswordEncodingService {
 
     }
 
-    /**
-     * Encodes the given raw password using BCryptPasswordEncoder.
-     * @author Sven Molenaar
-     * @param rawPassword The password to be encoded
-     * @return Encoded password
-     */
+    public void validatePassword(String password, String verifyPassword) {
+        if (password.length() < 8) {
+            throw new CustomHttpException(HttpStatus.UNAUTHORIZED, "The password doesn't meet the required length");
+        }
+
+        if (!password.matches(".*[!@#$%^&*()_+{}|:\"<>?,./;'\\[\\]`~].*")) {
+            throw new CustomHttpException(HttpStatus.UNAUTHORIZED, "The Password should have at least 1 special character");
+        }
+
+        if (password.contains(" ")) {
+            throw new CustomHttpException(HttpStatus.UNAUTHORIZED, "The Password can't contain any spaces");
+        }
+
+        if (!password.equals(verifyPassword)) {
+            throw new CustomHttpException(HttpStatus.UNAUTHORIZED, "Passwords do not match");
+        }
+    }
+
     public String encodePassword(String rawPassword) {
         return passwordEncoder.encode(rawPassword);
     }
 
-    /**
-     * Matches the given raw password with the encoded password using BCrypt.
-     * @author Sven Molenaar
-     * @param rawPassword      The raw password to compare
-     * @param encodedPassword  The encoded password to compare against
-     * @return True if passwords match, otherwise false
-     */
-    public boolean matchPasswords(String rawPassword, String encodedPassword) {
-        return passwordEncoder.matches(rawPassword, encodedPassword);
-    }
 
     /**
      * Validates the given password against a predefined regex pattern.

@@ -2,6 +2,7 @@ package com.example.feedbacktoolbackend.service;
 
 import com.example.feedbacktoolbackend.controller.dto.RegistrationDTO;
 import com.example.feedbacktoolbackend.controller.exception.AlreadyExistsException;
+import com.example.feedbacktoolbackend.controller.exception.CustomHttpException;
 import com.example.feedbacktoolbackend.controller.exception.InvalidInputException;
 import com.example.feedbacktoolbackend.data.UserRepository;
 import com.example.feedbacktoolbackend.data.Models.User;
@@ -21,8 +22,10 @@ public class UserService {
     private final PasswordEncodingService passwordEncoderService;
     private final UserRepository repository;
 
+
     @Autowired
     public UserService(PasswordEncodingService passwordEncoderService, UserRepository repository) {
+
         this.passwordEncoderService = passwordEncoderService;
         this.repository = repository;
     }
@@ -43,24 +46,9 @@ public class UserService {
         return convertToUserBusiness(repository.save(convertToUserEntity(userBusiness)));
     }
 
-    /**
-     * Validates the passwords provided in the authentication data.
-     * @author Sven molenaar
-     * @param password        The password to validate
-     * @param verifyPassword  The password to verify against
-     * @throws InvalidInputException if passwords do not match or if the password is invalid
-     */
-    private void validatePasswords(String password, String verifyPassword) throws InvalidInputException {
-        if (!password.equals(verifyPassword)) {
-            throw new InvalidInputException("Passwords do not match");
-
-
-        }
-
-        if (!passwordEncoderService.validatePassword(password)) {
-            throw new InvalidInputException("Invalid Password");
-        }
-    }
+public void validatePasswords(String password, String verifyPassword) {
+    passwordEncoderService.validatePassword(password, verifyPassword);
+}
 
     /**
      * Creates a UserBusiness object from the provided RegistrationDTO and validates name and email.
