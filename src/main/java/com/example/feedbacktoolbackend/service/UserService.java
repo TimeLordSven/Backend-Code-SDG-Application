@@ -48,7 +48,7 @@ public class UserService {
      * @param verifyPassword  The password to verify against
      * @throws InvalidInputException if passwords do not match or if the password is invalid
      */
-    private void validatePasswords(String password, String verifyPassword) throws InvalidInputException,CustomHttpException {
+    private void validatePasswords(String password, String verifyPassword) throws InvalidInputException {
         if (!password.equals(verifyPassword)) {
             throw new InvalidInputException("Passwords do not match");
         }
@@ -56,24 +56,6 @@ public class UserService {
         if (!passwordEncoderService.validatePassword(password)) {
             throw new InvalidInputException("Invalid Password");
 
-        }
-        if (password.length() < 8) {
-            throw new CustomHttpException(HttpStatus.UNAUTHORIZED, "The password doesn't meet the required length");
-        }
-
-        // Check for at least 1 special character
-        if (!password.matches(".*[!@#$%^&*()-_=+\\\\|\\[{\\]}].*")) {
-            throw new CustomHttpException(HttpStatus.BAD_REQUEST, "The Password should have at least 1 special character");
-        }
-
-        // Check for spaces
-        if (password.contains(" ")) {
-            throw new CustomHttpException(HttpStatus.BAD_REQUEST, "The Password can't contain any spaces");
-        }
-
-        // Check if passwords match
-        if (!password.equals(verifyPassword)) {
-            throw new CustomHttpException(HttpStatus.BAD_REQUEST, "Verify password doesn't match the password");
         }
     }
 
