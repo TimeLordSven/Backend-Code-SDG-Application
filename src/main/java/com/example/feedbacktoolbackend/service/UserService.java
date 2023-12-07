@@ -2,7 +2,6 @@ package com.example.feedbacktoolbackend.service;
 
 import com.example.feedbacktoolbackend.controller.dto.RegistrationDTO;
 import com.example.feedbacktoolbackend.controller.exception.AlreadyExistsException;
-import com.example.feedbacktoolbackend.controller.exception.CustomHttpException;
 import com.example.feedbacktoolbackend.controller.exception.InvalidInputException;
 import com.example.feedbacktoolbackend.data.UserRepository;
 import com.example.feedbacktoolbackend.data.Models.User;
@@ -10,7 +9,6 @@ import com.example.feedbacktoolbackend.enums.Role;
 import com.example.feedbacktoolbackend.service.models.UserBusiness;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -55,10 +53,8 @@ public class UserService {
 
         if (!passwordEncoderService.validatePassword(password)) {
             throw new InvalidInputException("Invalid Password");
-
         }
     }
-
 
     /**
      * Creates a UserBusiness object from the provided RegistrationDTO and validates name and email.
@@ -78,8 +74,7 @@ public class UserService {
         );
 
         if (!userBusiness.hasValidName()) {
-            //throw new InvalidInputException("Name can only contain alphabetical letters");
-            throw new CustomHttpException(HttpStatus.UNPROCESSABLE_ENTITY, "ErrorMessage");
+            throw new InvalidInputException("Name can only contain alphabetical letters");
         }
 
         if (!userBusiness.hasValidEmail()) {
