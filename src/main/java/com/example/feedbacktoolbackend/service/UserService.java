@@ -2,6 +2,7 @@ package com.example.feedbacktoolbackend.service;
 
 import com.example.feedbacktoolbackend.controller.dto.RegistrationDTO;
 import com.example.feedbacktoolbackend.controller.exception.AlreadyExistsException;
+import com.example.feedbacktoolbackend.controller.exception.CustomHttpException;
 import com.example.feedbacktoolbackend.controller.exception.InvalidInputException;
 import com.example.feedbacktoolbackend.data.UserRepository;
 import com.example.feedbacktoolbackend.data.Models.User;
@@ -9,6 +10,7 @@ import com.example.feedbacktoolbackend.enums.Role;
 import com.example.feedbacktoolbackend.service.models.UserBusiness;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -46,15 +48,35 @@ public class UserService {
      * @param verifyPassword  The password to verify against
      * @throws InvalidInputException if passwords do not match or if the password is invalid
      */
-    private void validatePasswords(String password, String verifyPassword) throws InvalidInputException {
+    private void validatePasswords(String password, String verifyPassword) throws InvalidInputException,CustomHttpException {
         if (!password.equals(verifyPassword)) {
             throw new InvalidInputException("Passwords do not match");
         }
 
         if (!passwordEncoderService.validatePassword(password)) {
             throw new InvalidInputException("Invalid Password");
+
+        }
+        if (password.length() < 8) {
+            throw new CustomHttpException(HttpStatus.UNAUTHORIZED, "The password doesn't meet the required length");
+        }
+
+        // Check for at least 1 special character
+        if (!password.matches(".*[!@#$%^&*()-_=+\\\\|\\[{\\]}].*")) {
+            throw new CustomHttpException(HttpStatus.BAD_REQUEST, "The Password should have at least 1 special character");
+        }
+
+        // Check for spaces
+        if (password.contains(" ")) {
+            throw new CustomHttpException(HttpStatus.BAD_REQUEST, "The Password can't contain any spaces");
+        }
+
+        // Check if passwords match
+        if (!password.equals(verifyPassword)) {
+            throw new CustomHttpException(HttpStatus.BAD_REQUEST, "Verify password doesn't match the password");
         }
     }
+
 
     /**
      * Creates a UserBusiness object from the provided RegistrationDTO and validates name and email.
@@ -74,7 +96,8 @@ public class UserService {
         );
 
         if (!userBusiness.hasValidName()) {
-            throw new InvalidInputException("Name can only contain alphabetical letters");
+            //throw new InvalidInputException("Name can only contain alphabetical letters");
+            throw new CustomHttpException(HttpStatus.UNPROCESSABLE_ENTITY, "ErrorMessage");
         }
 
         if (!userBusiness.hasValidEmail()) {

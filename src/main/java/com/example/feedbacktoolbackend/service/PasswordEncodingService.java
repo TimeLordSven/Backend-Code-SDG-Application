@@ -1,5 +1,7 @@
 package com.example.feedbacktoolbackend.service;
+import com.example.feedbacktoolbackend.controller.exception.CustomHttpException;
 import jakarta.transaction.Transactional;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -54,3 +56,6 @@ public class PasswordEncodingService {
         return password.matches(passwordRegex);
     }
 }
+
+
+
