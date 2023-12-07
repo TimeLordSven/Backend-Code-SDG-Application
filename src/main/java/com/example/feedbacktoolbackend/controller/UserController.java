@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 /**
  * Controller handling user-related operations.
  * Maps endpoints related to student user creation.
@@ -43,6 +45,6 @@ public class UserController {
     @PostMapping
     public ResponseEntity<Object> createUser(@RequestBody RegistrationDTO requestBody) {
         userService.createUser(requestBody);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(Map.of("message", "Successfully created"), HttpStatus.CREATED);
     }
 }
