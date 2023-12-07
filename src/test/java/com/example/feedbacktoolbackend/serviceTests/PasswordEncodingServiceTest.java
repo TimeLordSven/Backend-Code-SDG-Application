@@ -49,6 +49,10 @@ public class PasswordEncodingServiceTest {
     void testValidatePassword() {
         PasswordEncodingService passwordEncodingService = new PasswordEncodingService();
         assertTrue(passwordEncodingService.validatePassword("Valid@Password123"));
-        assertFalse(passwordEncodingService.validatePassword("weakpassword")); // Missing special characters
+    }
+    @Test
+    void testInValidatePassword() {
+        PasswordEncodingService passwordEncodingService = new PasswordEncodingService();
+        assertFalse(passwordEncodingService.validatePassword("weakpassword"));
     }
 }
