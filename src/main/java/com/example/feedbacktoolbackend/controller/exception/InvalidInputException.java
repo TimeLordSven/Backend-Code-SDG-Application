@@ -15,6 +15,6 @@ public class InvalidInputException extends RuntimeException {
      * @param message Error message indicating the reason for the invalid input
      */
     public InvalidInputException(String message) {
-        super("sError: " + message);
+        super(message);
     }
 }

@@ -1,6 +1,7 @@
 package com.example.feedbacktoolbackend.controller;
 
 import com.example.feedbacktoolbackend.controller.dto.RegistrationDTO;
+import com.example.feedbacktoolbackend.controller.exception.InvalidInputException;
 import com.example.feedbacktoolbackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,7 +45,12 @@ public class UserController {
      */
     @PostMapping
     public ResponseEntity<Object> createUser(@RequestBody RegistrationDTO requestBody) {
-        userService.createUser(requestBody);
-        return new ResponseEntity<>(Map.of("message", "Successfully created"), HttpStatus.CREATED);
+        try {
+            userService.createUser(requestBody);
+            return new ResponseEntity<>(Map.of("message", "Successfully created"), HttpStatus.CREATED);
+        } catch (InvalidInputException e) {
+            // Handle the specific exception
+            return new ResponseEntity<>(Map.of("error", "Exception occurred: " + e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 }
