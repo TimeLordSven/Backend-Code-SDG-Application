@@ -33,11 +33,12 @@ public class UserService {
     /**
      * Creates a new user based on the provided authentication data.
      * Validates input and checks for existing users before creation.
-     * @author Sven Molenaar
+     *
      * @param registrationDTO Authentication data to create a user
      * @return UserBusiness object representing the created user
      * @throws AlreadyExistsException if a user with the provided email already exists
-     * @throws InvalidInputException if input data is invalid or doesn't match criteria
+     * @throws InvalidInputException  if input data is invalid or doesn't match criteria
+     * @author Sven Molenaar
      */
     public UserBusiness createUser(RegistrationDTO registrationDTO) throws AlreadyExistsException, InvalidInputException {
         validatePasswords(registrationDTO.password(), registrationDTO.verifyPassword());
@@ -46,55 +47,111 @@ public class UserService {
         return convertToUserBusiness(repository.save(convertToUserEntity(userBusiness)));
     }
 
-public void validatePasswords(String password, String verifyPassword) {
-    passwordEncoderService.validatePassword(password, verifyPassword);
-}
+    public void validatePasswords(String password, String verifyPassword) {
+        passwordEncoderService.validatePassword(password, verifyPassword);
+    }
 
     /**
      * Creates a UserBusiness object from the provided RegistrationDTO and validates name and email.
-     * @author Sven Molenaar
+     *
      * @param registrationDTO Authentication data to create a user
      * @return UserBusiness object representing the user from the DTO
      * @throws InvalidInputException if name or email is invalid
+     * @author Sven Molenaar
      */
-    private UserBusiness createUserBusinessFromDTO(RegistrationDTO registrationDTO) throws InvalidInputException {
-        UserBusiness userBusiness = new UserBusiness(
-                registrationDTO.firstName(),
-                registrationDTO.prefixes(),
-                registrationDTO.lastName(),
-                registrationDTO.email(),
-                passwordEncoderService.encodePassword(registrationDTO.password()),
-                Role.STUDENT
-        );
-
-        if (!userBusiness.hasValidName()) {
-            throw new InvalidInputException("Name can only contain alphabetical letters");
+//    private UserBusiness createUserBusinessFromDTO(RegistrationDTO registrationDTO) throws InvalidInputException {
+//        UserBusiness userBusiness = new UserBusiness(
+//                registrationDTO.firstName(),
+//                registrationDTO.prefixes(),
+//                registrationDTO.lastName(),
+//                registrationDTO.email(),
+//                passwordEncoderService.encodePassword(registrationDTO.password()),
+//                Role.STUDENT
+//        );
+//        if (userBusiness.getFirstName() == null || firstName.isEmpty()) {
+//            throw new InvalidInputException("First name cannot be null or an empty string");
+//        }
+//
+//        if (lastName == null || lastName.isEmpty()) {
+//            throw new InvalidInputException("Last name cannot be null or an empty string");
+//        }
+//        if (!userBusiness.hasValidName()) {
+//            throw new InvalidInputException("Name can only contain alphabetical letters and can not be null");
+//        }
+//
+//        if (!userBusiness.hasValidEmail()) {
+//            throw new InvalidInputException(userBusiness.getEmail() + " is not a valid email");
+//        }
+//
+//        return userBusiness;
+//    }
+    private void validateName(String name, String fieldName) throws CustomHttpException {
+        if (name == null || name.isEmpty()) {
+            throw new CustomHttpException(HttpStatus.BAD_REQUEST, fieldName + " cannot be null or an empty string");
         }
 
+        if (name.length() < 1) {
+            throw new CustomHttpException(HttpStatus.BAD_REQUEST, fieldName + " should be at least 1 character long");
+        }
+
+        if (name.length() > 50) {
+            throw new CustomHttpException(HttpStatus.BAD_REQUEST, fieldName + " cannot be longer than 50 characters");
+        }
+
+        if (name.contains(" ")) {
+            throw new CustomHttpException(HttpStatus.BAD_REQUEST, fieldName + " cannot contain spaces");
+        }
+
+        if (!name.matches("^[a-zA-Z]+$")) {
+            throw new CustomHttpException(HttpStatus.BAD_REQUEST, fieldName + " can only contain alphabetic characters");
+        }
+    }
+
+    private UserBusiness createUserBusinessFromDTO(RegistrationDTO registrationDTO) throws InvalidInputException {
+        String firstName = registrationDTO.firstName();
+        String prefixes = registrationDTO.prefixes();
+        String lastName = registrationDTO.lastName();
+        String email = registrationDTO.email();
+        String password = passwordEncoderService.encodePassword(registrationDTO.password());
+        Role role = Role.STUDENT;
+
+        validateName(firstName, "First name");
+        validateName(lastName, "Last name");
+
+        if (prefixes != null && !prefixes.isEmpty() && !prefixes.matches("^[a-zA-Z]+$")) {
+            //throw new InvalidInputException("Prefix can only contain alphabetic characters");
+            throw new CustomHttpException(HttpStatus.BAD_REQUEST, "Prefix can only contain alphabetic characters");
+        }
+
+        UserBusiness userBusiness = new UserBusiness(firstName, prefixes, lastName, email, password, role);
+
         if (!userBusiness.hasValidEmail()) {
-            throw new InvalidInputException(userBusiness.getEmail() + " is not a valid email");
+            throw new CustomHttpException(HttpStatus.BAD_REQUEST, userBusiness.getEmail() + " is not a valid email");
         }
 
         return userBusiness;
     }
 
+
     /**
      * Validates if a user with the same email already exists.
-     * @author Sven Molenaar
+     *
      * @param userBusiness The UserBusiness object to check for existing email
      * @throws AlreadyExistsException if a user with the same email already exists
+     * @author Sven Molenaar
      */
     private void validateUser(UserBusiness userBusiness) throws AlreadyExistsException {
         if (repository.existsByEmail(userBusiness.getEmail())) {
-            throw new AlreadyExistsException("User");
+            throw new CustomHttpException(HttpStatus.CONFLICT, userBusiness.getEmail() + "Already is taken");
         }
     }
 
     /**
      * Converts a UserBusiness object to a User entity.
-     * @author Sven Molenaar
+     *
      * @param userBusiness UserBusiness object to convert
      * @return User entity
+     * @author Sven Molenaar
      */
     private User convertToUserEntity(UserBusiness userBusiness) {
         User user = new User();
@@ -107,12 +164,14 @@ public void validatePasswords(String password, String verifyPassword) {
         user.setRole(userBusiness.getRole());
         return user;
     }
+
     /**
      * Converts a User entity to a UserBusiness object.
-     * @author Sven Molenaar
+     *
      * @param userEntity User entity to convert
      * @return UserBusiness object
      * @throws IllegalArgumentException if the provided User entity is null
+     * @author Sven Molenaar
      */
     private UserBusiness convertToUserBusiness(User userEntity) {
         if (userEntity == null) {
