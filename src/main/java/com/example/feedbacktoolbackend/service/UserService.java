@@ -63,7 +63,7 @@ public class UserService {
             throw new CustomHttpException(HttpStatus.BAD_REQUEST, fieldName + " cannot be null or an empty string");
         }
 
-        if (name.length() < 1) {
+        if (name.length() < 2) {
             throw new CustomHttpException(HttpStatus.BAD_REQUEST, fieldName + " should be at least 1 character long");
         }
 
