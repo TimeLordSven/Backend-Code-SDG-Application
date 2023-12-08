@@ -13,11 +13,12 @@ public class CorsConfig {
      * Creates and configures a CORS (Cross-Origin Resource Sharing) filter bean.
      * This method sets up CORS configuration to allow specific origins, methods, and headers.
      * It registers the configured CORS settings to be applied to all endpoints (/**).
-     * @author Sven Molenaar
+     *
      * @return CorsFilter bean configured with CORS settings.
+     * @author Sven Molenaar
      */
     @Bean
-    public CorsFilter CorsFilter(){
+    public CorsFilter CorsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
 

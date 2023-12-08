@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 /**
  * Exception thrown for invalid input data.
  * Extends RuntimeException and allows setting a custom HTTP status code.
+ *
  * @author Sven Molenaar
  */
 @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -14,9 +15,10 @@ public class CustomHttpException extends RuntimeException {
 
     /**
      * Constructs a CustomHttpException with the provided HTTP status and error message.
-     * @author Sven Molenaar
+     *
      * @param httpStatus Custom HTTP status code to be sent back
-     * @param message Error message indicating the reason for the exception
+     * @param message    Error message indicating the reason for the exception
+     * @author Sven Molenaar
      */
     public CustomHttpException(HttpStatus httpStatus, String message) {
         super(message);
@@ -25,8 +27,9 @@ public class CustomHttpException extends RuntimeException {
 
     /**
      * Get the HTTP status code associated with this exception.
-     * @author Sven Molenaar
+     *
      * @return The HTTP status code
+     * @author Sven Molenaar
      */
     public HttpStatus getHttpStatus() {
         return httpStatus;

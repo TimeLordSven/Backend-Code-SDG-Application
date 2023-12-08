@@ -17,6 +17,7 @@ import java.util.Map;
 /**
  * Controller handling user-related operations.
  * Maps endpoints related to student user creation.
+ *
  * @author Sven Molenaar
  * Parameters (userService, requestBody)
  * Returns ResponseEntity with HTTP status
@@ -28,44 +29,33 @@ public class UserController {
 
     /**
      * Constructor injection for UserService.
-     * @author Sven Molenaar
+     *
      * @param userService Service handling user operations
+     * @author Sven Molenaar
      */
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
-//    /**
-//     * Endpoint to create a new student user.
-//     * Receives an RegistrationDTO from the request body.
-//     * Calls the UserService to create a new user.
-//     * @author Sven Molenaar
-//     * @param requestBody RegistrationDTO object containing user data
-//     * Returns ResponseEntity with CREATED status
-//     */
-//    @PostMapping
-//    public ResponseEntity<Object> createUser(@RequestBody RegistrationDTO requestBody) {
-//        try {
-//            userService.createUser(requestBody);
-//            return new ResponseEntity<>(Map.of("message", "Successfully created"), HttpStatus.CREATED);
-//        } catch (InvalidInputException | CustomHttpException e) {
-//            // Handle the specific exception
-//            return new ResponseEntity<>(Map.of("error", "Exception occurred: " + e.getMessage()), HttpStatus.BAD_REQUEST);
-//        }
-//    }
+    /**
+     * Endpoint for creating a new student user.
+     *
+     * @param requestBody Registration details of the new user
+     * @return ResponseEntity with appropriate HTTP status and message
+     * @author Sven Molenaar
+     */
     @PostMapping
     public ResponseEntity<Object> createUser(@RequestBody RegistrationDTO requestBody) {
         try {
             userService.createUser(requestBody);
             return new ResponseEntity<>(Map.of("message", "Successfully created"), HttpStatus.CREATED);
         } catch (InvalidInputException | CustomHttpException e) {
-            HttpStatus httpStatus = HttpStatus.BAD_REQUEST; // Default status
+            HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
             if (e instanceof CustomHttpException) {
                 httpStatus = ((CustomHttpException) e).getHttpStatus();
             }
-
-            return new ResponseEntity<>(Map.of("error", "message: " + e.getMessage()), httpStatus);
+            return new ResponseEntity<>(Map.of("message", e.getMessage()), httpStatus);
         }
     }
 

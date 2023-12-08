@@ -52,39 +52,14 @@ public class UserService {
     }
 
     /**
-     * Creates a UserBusiness object from the provided RegistrationDTO and validates name and email.
+     * Validates the given name against various criteria.
      *
-     * @param registrationDTO Authentication data to create a user
-     * @return UserBusiness object representing the user from the DTO
-     * @throws InvalidInputException if name or email is invalid
+     * @param name      The name to validate
+     * @param fieldName The name of the field being validated
+     * @throws CustomHttpException When the validation fails
      * @author Sven Molenaar
      */
-//    private UserBusiness createUserBusinessFromDTO(RegistrationDTO registrationDTO) throws InvalidInputException {
-//        UserBusiness userBusiness = new UserBusiness(
-//                registrationDTO.firstName(),
-//                registrationDTO.prefixes(),
-//                registrationDTO.lastName(),
-//                registrationDTO.email(),
-//                passwordEncoderService.encodePassword(registrationDTO.password()),
-//                Role.STUDENT
-//        );
-//        if (userBusiness.getFirstName() == null || firstName.isEmpty()) {
-//            throw new InvalidInputException("First name cannot be null or an empty string");
-//        }
-//
-//        if (lastName == null || lastName.isEmpty()) {
-//            throw new InvalidInputException("Last name cannot be null or an empty string");
-//        }
-//        if (!userBusiness.hasValidName()) {
-//            throw new InvalidInputException("Name can only contain alphabetical letters and can not be null");
-//        }
-//
-//        if (!userBusiness.hasValidEmail()) {
-//            throw new InvalidInputException(userBusiness.getEmail() + " is not a valid email");
-//        }
-//
-//        return userBusiness;
-//    }
+
     private void validateName(String name, String fieldName) throws CustomHttpException {
         if (name == null || name.isEmpty()) {
             throw new CustomHttpException(HttpStatus.BAD_REQUEST, fieldName + " cannot be null or an empty string");
@@ -107,6 +82,14 @@ public class UserService {
         }
     }
 
+    /**
+     * Creates a UserBusiness object from the provided RegistrationDTO.
+     *
+     * @param registrationDTO The DTO containing user registration details
+     * @return UserBusiness object created from the DTO
+     * @throws InvalidInputException When the input is invalid
+     * @author Sven Molenaar
+     */
     private UserBusiness createUserBusinessFromDTO(RegistrationDTO registrationDTO) throws InvalidInputException {
         String firstName = registrationDTO.firstName();
         String prefixes = registrationDTO.prefixes();

@@ -1,16 +1,20 @@
 package com.example.feedbacktoolbackend.data.Models;
+
 import com.example.feedbacktoolbackend.enums.Role;
 import jakarta.persistence.*;
+
 /**
  * Represents a User entity, mapped to a database table.
  * This class defines the structure of a User and its mapping to the database.
+ *
  * @author Sven Molenaar
  */
 
 @Entity
 @Table(name = "users")
 public class User {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String firstName;
     private String prefixes;

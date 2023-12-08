@@ -77,6 +77,12 @@ public class UserBusiness {
         this.id = id;
     }
 
+    /**
+     * Checks if the stored email is valid using a regex pattern.
+     *
+     * @return True if the email is valid, false otherwise
+     * @author Sven Molenaar
+     */
     public boolean hasValidEmail() {
         return email != null && email.matches("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$");
     }
