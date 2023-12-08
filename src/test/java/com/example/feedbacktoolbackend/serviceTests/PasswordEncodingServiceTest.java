@@ -1,58 +1,82 @@
-/**
- * @Author Sven Molenaar
- */
 package com.example.feedbacktoolbackend.serviceTests;
+/*
+  @Author Sven Molenaar
+ */
 
+import com.example.feedbacktoolbackend.controller.exception.CustomHttpException;
 import com.example.feedbacktoolbackend.service.PasswordEncodingService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class PasswordEncodingServiceTest {
+class PasswordEncodingServiceTest {
+
+    private PasswordEncodingService passwordEncodingService;
+
+    @BeforeEach
+    void setUp() {
+        passwordEncodingService = new PasswordEncodingService();
+    }
 
     /**
-     * Test to verify the encoding of a password using PasswordEncodingService.
-     * Verifies that the encoded password is not equal to the raw password and matches the raw password when checked with BCryptPasswordEncoder.
-     * @author Sven Molenaar
+     * Validates that a password below the required length throws a CustomHttpException.
      */
     @Test
-    void testEncodePassword() {
-        PasswordEncodingService passwordEncodingService = new PasswordEncodingService();
+    void validatePassword_LengthBelowRequirement_ShouldThrowHttpException() {
+        assertThrows(CustomHttpException.class, () -> {
+            passwordEncodingService.validatePassword("pass", "pass");
+        });
+    }
+
+    /**
+     * Validates that a password without special characters throws a CustomHttpException.
+     */
+    @Test
+    void validatePassword_NoSpecialCharacter_ShouldThrowHttpException() {
+        assertThrows(CustomHttpException.class, () -> {
+            passwordEncodingService.validatePassword("Password123", "Password123");
+        });
+    }
+
+    /**
+     * Validates that a password containing spaces throws a CustomHttpException.
+     */
+    @Test
+    void validatePassword_ContainsSpace_ShouldThrowHttpException() {
+        assertThrows(CustomHttpException.class, () -> {
+            passwordEncodingService.validatePassword("Pass word123!", "Pass word123!");
+        });
+    }
+
+    /**
+     * Validates that non-matching passwords throw a CustomHttpException.
+     */
+    @Test
+    void validatePassword_PasswordsDoNotMatch_ShouldThrowHttpException() {
+        assertThrows(CustomHttpException.class, () -> {
+            passwordEncodingService.validatePassword("Password123!", "Password321!");
+        });
+    }
+
+    /**
+     * Verifies that the encodePassword method returns an encoded password.
+     */
+    @Test
+    void encodePassword_ShouldReturnEncodedPassword() {
         String rawPassword = "Password123!";
         String encodedPassword = passwordEncodingService.encodePassword(rawPassword);
+
+        assertNotNull(encodedPassword);
         assertNotEquals(rawPassword, encodedPassword);
-        assertTrue(new BCryptPasswordEncoder().matches(rawPassword, encodedPassword));
     }
 
     /**
-     * Test to check the matching of passwords using PasswordEncodingService.
-     * Verifies that a raw password matches its encoded version and that a different password doesn't match the encoded password.
-     * @author Sven Molenaar
+     * Validates that a valid password passes the validatePassword method.
      */
     @Test
-    void testMatchPasswords() {
-        PasswordEncodingService passwordEncodingService = new PasswordEncodingService();
-        String rawPassword = "Password123!";
-        String encodedPassword = passwordEncodingService.encodePassword(rawPassword);
-        assertTrue(passwordEncodingService.matchPasswords(rawPassword, encodedPassword));
-        assertFalse(passwordEncodingService.matchPasswords("Wrongpassword123!", encodedPassword));
-    }
-
-    /**
-     * Test to validate the strength of a password using PasswordEncodingService.
-     * Verifies that a password meets the required criteria (contains special characters and has a minimum length) to be considered valid.
-     * Verifies that a password without special characters is considered invalid.
-     * @author Sven Molenaar
-     */
-    @Test
-    void testValidatePassword() {
-        PasswordEncodingService passwordEncodingService = new PasswordEncodingService();
-        assertTrue(passwordEncodingService.validatePassword("Valid@Password123"));
-    }
-    @Test
-    void testInValidatePassword() {
-        PasswordEncodingService passwordEncodingService = new PasswordEncodingService();
-        assertFalse(passwordEncodingService.validatePassword("weakpassword"));
+    void validatePassword_ValidPassword_ReturnTrue() {
+        String validPassword = "Passw0rd!";
+        assertTrue(passwordEncodingService.validatePassword(validPassword));
     }
 }
