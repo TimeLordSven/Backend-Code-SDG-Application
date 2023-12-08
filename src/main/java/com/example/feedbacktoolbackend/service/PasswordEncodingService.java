@@ -37,6 +37,12 @@ public class PasswordEncodingService {
      * @author Sven Molenaar
      */
     public void validatePassword(String password, String verifyPassword) {
+        if (password == null) {
+            throw new CustomHttpException(HttpStatus.BAD_REQUEST, "The password can not be null");
+        }
+        if (verifyPassword== null) {
+            throw new CustomHttpException(HttpStatus.BAD_REQUEST, "The password can not be null");
+        }
         if (password.length() < 8) {
             throw new CustomHttpException(HttpStatus.BAD_REQUEST, "The password doesn't meet the required length");
         }
