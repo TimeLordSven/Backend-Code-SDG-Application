@@ -27,19 +27,16 @@ public class PasswordEncodingService {
 
     public void validatePassword(String password, String verifyPassword) {
         if (password.length() < 8) {
-            throw new CustomHttpException(HttpStatus.UNAUTHORIZED, "The password doesn't meet the required length");
+            throw new CustomHttpException(HttpStatus.BAD_REQUEST, "The password doesn't meet the required length");
         }
-
         if (!password.matches(".*[!@#$%^&*()_+{}|:\"<>?,./;'\\[\\]`~].*")) {
-            throw new CustomHttpException(HttpStatus.UNAUTHORIZED, "The Password should have at least 1 special character");
+            throw new CustomHttpException(HttpStatus.BAD_REQUEST, "The Password should have at least 1 special character");
         }
-
         if (password.contains(" ")) {
-            throw new CustomHttpException(HttpStatus.UNAUTHORIZED, "The Password can't contain any spaces");
+            throw new CustomHttpException(HttpStatus.BAD_REQUEST, "The Password can't contain any spaces");
         }
-
         if (!password.equals(verifyPassword)) {
-            throw new CustomHttpException(HttpStatus.UNAUTHORIZED, "Passwords do not match");
+            throw new CustomHttpException(HttpStatus.BAD_REQUEST, "Passwords do not match");
         }
     }
 
