@@ -6,7 +6,6 @@ package com.example.feedbacktoolbackend.controller.dto;
  *
  * @author Sven Molenaar
  */
-public record RegistrationDTO(String firstName, String prefixes, String lastName, String email, String password,
-                              String verifyPassword) {
+public record RegistrationDTO(String firstName, String prefixes, String lastName, String email, String password, String verifyPassword) {
 
 }

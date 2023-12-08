@@ -73,7 +73,7 @@ public class UserServiceTest {
                 "Abraham",
                 "Van",
                 "Helsing40",
-                "VanHelsing@Hva.cem",
+                "VanHelsing@Hva.com",
                 "Password123!",
                 "Password123!"
         );
@@ -87,7 +87,7 @@ public class UserServiceTest {
                 "Abraham",
                 "Van",
                 "Helsing",
-                "VanHelsing@Hvadem",
+                "VanHelsing_Hva.com",
                 "Password123!",
                 "Password123!"
         );
@@ -109,7 +109,7 @@ public class UserServiceTest {
     }
 
     @Test
-    @Description("Checks if verifypPassword is invalid")
+    @Description("Checks if the verified password is invalid")
     void testRegistrationInvalidVerifyPassword() {
         RegistrationDTO registrationDTO = new RegistrationDTO(
                 "Abraham",
@@ -129,7 +129,7 @@ public class UserServiceTest {
                 null,
                 "Van",
                 "Helsing",
-                "test@example.com",
+                "VanHelsing@Hva.com",
                 "Password123!",
                 "Password123!"
         );
@@ -143,7 +143,7 @@ public class UserServiceTest {
                 "",
                 "Van",
                 "Helsing",
-                "test@example.com",
+                "VanHelsing@Hva.com",
                 "Password123!",
                 "Password123!"
         );
@@ -157,7 +157,7 @@ public class UserServiceTest {
                 "J",
                 "Van",
                 "Helsing",
-                "test@example.com",
+                "VanHelsing@Hva.com",
                 "Password123!",
                 "Password123!"
         );
@@ -172,7 +172,7 @@ public class UserServiceTest {
         RegistrationDTO registrationDTO = new RegistrationDTO(
                 longName, "Van",
                 "Helsing",
-                "test@example.com",
+                "VanHelsing@Hva.com",
                 "Password123!",
                 "Password123!"
         );
@@ -186,7 +186,7 @@ public class UserServiceTest {
                 "John Doe",
                 "Van",
                 "Helsing",
-                "test@example.com",
+                "VanHelsing@Hva.com",
                 "Password123!",
                 "Password123!"
         );
@@ -200,7 +200,7 @@ public class UserServiceTest {
                 "John123",
                 "Van",
                 "Helsing",
-                "test@example.com",
+                "VanHelsing@Hva.com",
                 "Password123!",
                 "Password123!"
         );

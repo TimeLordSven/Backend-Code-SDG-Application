@@ -75,7 +75,7 @@ class PasswordEncodingServiceTest {
      * Validates that a valid password passes the validatePassword method.
      */
     @Test
-    void validatePassword_ValidPassword_ReturnTrue() {
+    void validatePassword_validatePassword_ValidPassword_ShouldReturnTrue() {
         String validPassword = "Passw0rd!";
         assertTrue(passwordEncodingService.validatePassword(validPassword));
     }

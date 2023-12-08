@@ -18,7 +18,7 @@ public class CorsConfig {
      * @author Sven Molenaar
      */
     @Bean
-    public CorsFilter CorsFilter() {
+    public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
 

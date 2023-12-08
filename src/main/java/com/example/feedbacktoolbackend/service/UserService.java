@@ -38,7 +38,7 @@ public class UserService {
      * @throws InvalidInputException  if input data is invalid or doesn't match criteria
      * @author Sven Molenaar
      */
-    public UserBusiness createUser(RegistrationDTO registrationDTO) throws AlreadyExistsException, InvalidInputException {
+    public UserBusiness createUser(RegistrationDTO registrationDTO) throws AlreadyExistsException, InvalidInputException, CustomHttpException {
         validatePasswords(registrationDTO.password(), registrationDTO.verifyPassword());
         UserBusiness userBusiness = createUserBusinessFromDTO(registrationDTO);
         validateUser(userBusiness);
@@ -88,7 +88,7 @@ public class UserService {
      * @throws CustomHttpException When the input is invalid
      * @author Sven Molenaar
      */
-    private UserBusiness createUserBusinessFromDTO(RegistrationDTO registrationDTO) throws InvalidInputException {
+    private UserBusiness createUserBusinessFromDTO(RegistrationDTO registrationDTO) throws CustomHttpException {
         String firstName = registrationDTO.firstName();
         String prefixes = registrationDTO.prefixes();
         String lastName = registrationDTO.lastName();
@@ -123,7 +123,7 @@ public class UserService {
      */
     private void validateUser(UserBusiness userBusiness) throws AlreadyExistsException {
         if (repository.existsByEmail(userBusiness.getEmail())) {
-            throw new CustomHttpException(HttpStatus.CONFLICT, userBusiness.getEmail() + "Already is taken");
+            throw new CustomHttpException(HttpStatus.CONFLICT, userBusiness.getEmail() + " Is already taken");
         }
     }
 
