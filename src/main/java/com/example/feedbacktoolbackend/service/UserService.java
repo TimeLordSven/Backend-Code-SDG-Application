@@ -11,10 +11,8 @@ import com.example.feedbacktoolbackend.service.models.UserBusiness;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
 
 @Service
 @Transactional
@@ -87,7 +85,7 @@ public class UserService {
      *
      * @param registrationDTO The DTO containing user registration details
      * @return UserBusiness object created from the DTO
-     * @throws InvalidInputException When the input is invalid
+     * @throws CustomHttpException When the input is invalid
      * @author Sven Molenaar
      */
     private UserBusiness createUserBusinessFromDTO(RegistrationDTO registrationDTO) throws InvalidInputException {
@@ -120,7 +118,7 @@ public class UserService {
      * Validates if a user with the same email already exists.
      *
      * @param userBusiness The UserBusiness object to check for existing email
-     * @throws AlreadyExistsException if a user with the same email already exists
+     * @throws CustomHttpException if a user with the same email already exists
      * @author Sven Molenaar
      */
     private void validateUser(UserBusiness userBusiness) throws AlreadyExistsException {
