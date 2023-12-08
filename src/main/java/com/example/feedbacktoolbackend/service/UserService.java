@@ -121,9 +121,9 @@ public class UserService {
      * @throws CustomHttpException if a user with the same email already exists
      * @author Sven Molenaar
      */
-    private void validateUser(UserBusiness userBusiness) throws AlreadyExistsException {
+    private void validateUser(UserBusiness userBusiness) throws CustomHttpException {
         if (repository.existsByEmail(userBusiness.getEmail())) {
-            throw new CustomHttpException(HttpStatus.CONFLICT, userBusiness.getEmail() + " Is already taken");
+            throw new CustomHttpException(HttpStatus.CONFLICT, " E-mail is already taken");
         }
     }
 
