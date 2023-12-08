@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
 @SpringBootTest
 @Transactional
 public class UserServiceTest {
@@ -35,6 +36,7 @@ public class UserServiceTest {
         UserBusiness user = userService.createUser(dto);
         Assertions.assertNotNull(user);
     }
+
     @Test
     @Description("Registration failure due to an invalid first name.")
     void testRegistrationInvalidFirstName() {
@@ -47,11 +49,11 @@ public class UserServiceTest {
                 "Password123!"
 
         );
-        assertThrows(InvalidInputException.class, () -> userService.createUser(registrationDTO));
+        assertThrows(CustomHttpException.class, () -> userService.createUser(registrationDTO));
     }
+
     @Test
     @Description("Registration failure due to an invalid prefix.")
-
     void testRegistrationInvalidPrefix() {
         RegistrationDTO registrationDTO = new RegistrationDTO(
                 "Abraham",
@@ -61,8 +63,9 @@ public class UserServiceTest {
                 "Password123!",
                 "Password123!"
         );
-        assertThrows(InvalidInputException.class, () -> userService.createUser(registrationDTO));
+        assertThrows(CustomHttpException.class, () -> userService.createUser(registrationDTO));
     }
+
     @Test
     @Description("Registration failure due to an invalid last name.")
     void testRegistrationInvalidLastName() {
@@ -74,8 +77,9 @@ public class UserServiceTest {
                 "Password123!",
                 "Password123!"
         );
-        assertThrows(InvalidInputException.class, () -> userService.createUser(registrationDTO));
+        assertThrows(CustomHttpException.class, () -> userService.createUser(registrationDTO));
     }
+
     @Test
     @Description("Registration failure due to an invalid email format.")
     void testRegistrationInvalidEmail() {
@@ -87,8 +91,9 @@ public class UserServiceTest {
                 "Password123!",
                 "Password123!"
         );
-        assertThrows(InvalidInputException.class, () -> userService.createUser(registrationDTO));
+        assertThrows(CustomHttpException.class, () -> userService.createUser(registrationDTO));
     }
+
     @Test
     @Description("Registration failure due to an invalid password.")
     void testRegistrationInvalidPassword() {
@@ -100,10 +105,11 @@ public class UserServiceTest {
                 "Pass!",
                 "Password123!"
         );
-        assertThrows(InvalidInputException.class, () -> userService.createUser(registrationDTO));
+        assertThrows(CustomHttpException.class, () -> userService.createUser(registrationDTO));
     }
-    @Test
 
+    @Test
+    @Description("Checks if verifypPassword is invalid")
     void testRegistrationInvalidVerifyPassword() {
         RegistrationDTO registrationDTO = new RegistrationDTO(
                 "Abraham",
@@ -113,7 +119,92 @@ public class UserServiceTest {
                 "Password123!",
                 "Pa!"
         );
-        assertThrows(InvalidInputException.class, () -> userService.createUser(registrationDTO));
+        assertThrows(CustomHttpException.class, () -> userService.createUser(registrationDTO));
+    }
+
+    @Test
+    @Description("Validate name cannot be null")
+    void testValidationNameNull() {
+        RegistrationDTO registrationDTO = new RegistrationDTO(
+                null,
+                "Van",
+                "Helsing",
+                "test@example.com",
+                "Password123!",
+                "Password123!"
+        );
+        assertThrows(CustomHttpException.class, () -> userService.createUser(registrationDTO));
+    }
+
+    @Test
+    @Description("Validate name cannot be empty")
+    void testValidationNameEmpty() {
+        RegistrationDTO registrationDTO = new RegistrationDTO(
+                "",
+                "Van",
+                "Helsing",
+                "test@example.com",
+                "Password123!",
+                "Password123!"
+        );
+        assertThrows(CustomHttpException.class, () -> userService.createUser(registrationDTO));
+    }
+
+    @Test
+    @Description("Validate name should be at least 1 character long")
+    void testValidationNameTooShort() {
+        RegistrationDTO registrationDTO = new RegistrationDTO(
+                "J",
+                "Van",
+                "Helsing",
+                "test@example.com",
+                "Password123!",
+                "Password123!"
+        );
+        assertThrows(CustomHttpException.class, () -> userService.createUser(registrationDTO));
+    }
+
+    @Test
+    @Description("Validate name cannot be longer than 50 characters")
+    void testValidationNameTooLong() {
+        // Create a name with more than 50 characters
+        String longName = "LoremIpsumDolorSitAmetConsecteturAdipiscingElitVestibulumIdLaciniaMetus";
+        RegistrationDTO registrationDTO = new RegistrationDTO(
+                longName, "Van",
+                "Helsing",
+                "test@example.com",
+                "Password123!",
+                "Password123!"
+        );
+        assertThrows(CustomHttpException.class, () -> userService.createUser(registrationDTO));
+    }
+
+    @Test
+    @Description("Validate name cannot contain spaces")
+    void testValidationNameContainsSpace() {
+        RegistrationDTO registrationDTO = new RegistrationDTO(
+                "John Doe",
+                "Van",
+                "Helsing",
+                "test@example.com",
+                "Password123!",
+                "Password123!"
+        );
+        assertThrows(CustomHttpException.class, () -> userService.createUser(registrationDTO));
+    }
+
+    @Test
+    @Description("Validate name can only contain alphabetic characters")
+    void testValidationNameContainsNonAlphabetic() {
+        RegistrationDTO registrationDTO = new RegistrationDTO(
+                "John123",
+                "Van",
+                "Helsing",
+                "test@example.com",
+                "Password123!",
+                "Password123!"
+        );
+        assertThrows(CustomHttpException.class, () -> userService.createUser(registrationDTO));
     }
 }
 
