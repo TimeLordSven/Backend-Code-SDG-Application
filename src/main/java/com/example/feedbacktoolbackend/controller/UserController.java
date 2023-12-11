@@ -1,22 +1,37 @@
 package com.example.feedbacktoolbackend.controller;
 
-import com.example.feedbacktoolbackend.controller.dto.UserDTO;
+import com.example.feedbacktoolbackend.controller.dto.RegistrationDTO;
+import com.example.feedbacktoolbackend.controller.exception.CustomHttpException;
+import com.example.feedbacktoolbackend.controller.exception.InvalidInputException;
 import com.example.feedbacktoolbackend.service.UserService;
-import com.example.feedbacktoolbackend.service.models.UserBusiness;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
+/**
+ * Controller handling user-related operations.
+ * Maps endpoints related to student user creation.
+ *
+ * @author Sven Molenaar
+ * Parameters (userService, requestBody)
+ * Returns ResponseEntity with HTTP status
+ */
 @RestController
-@RequestMapping("/test")
+@RequestMapping("/users/students")
 public class UserController {
     private final UserService userService;
 
     /**
-     * Constructor injection for UserController.
+     * Constructor injection for UserService.
+     *
+     * @param userService Service handling user operations
      * @author Sven Molenaar
-     * @param userService The service for user-related operations.
      */
     @Autowired
     public UserController(UserService userService) {
@@ -24,23 +39,24 @@ public class UserController {
     }
 
     /**
-     * Handles GET requests to retrieve user data and converts it to a UserDTO.
+     * Endpoint for creating a new student user.
+     *
+     * @param requestBody Registration details of the new user
+     * @return ResponseEntity with appropriate HTTP status and message
      * @author Sven Molenaar
-     * @return UserDTO containing user information fetched from the service.
      */
-    @GetMapping
-    public UserDTO getUser(){
-        UserBusiness user = userService.getUser(1L);
-        return convertToDTO(user);
+    @PostMapping
+    public ResponseEntity<Object> createUser(@RequestBody RegistrationDTO requestBody) {
+        try {
+            userService.createUser(requestBody);
+            return new ResponseEntity<>(Map.of("message", "Successfully created"), HttpStatus.CREATED);
+        } catch (InvalidInputException | CustomHttpException e) {
+            HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+            if (e instanceof CustomHttpException) {
+                httpStatus = ((CustomHttpException) e).getHttpStatus();
+            }
+            return new ResponseEntity<>(Map.of("message", e.getMessage()), httpStatus);
+        }
     }
 
-    /**
-     * Converts UserBusiness object to UserDTO object.
-     * @author Sven Molenaar
-     * @param userBusiness The UserBusiness object to be converted.
-     * @return UserDTO containing user information.
-     */
-    private UserDTO convertToDTO(UserBusiness userBusiness){
-        return new UserDTO(userBusiness.getId(), userBusiness.getFirstName(), userBusiness.getLastName());
-    }
 }
