@@ -98,9 +98,11 @@ public class UserService {
 
         validateName(firstName, "First name");
         validateName(lastName, "Last name");
-
+        /**
+         * Regex Explanation
+         * String only contains alphabetic characters, regardless of case.
+         */
         if (prefixes != null && !prefixes.isEmpty() && !prefixes.matches("^[a-zA-Z]+$")) {
-            //throw new InvalidInputException("Prefix can only contain alphabetic characters");
             throw new CustomHttpException(HttpStatus.BAD_REQUEST, "Prefix can only contain alphabetic characters");
         }
 

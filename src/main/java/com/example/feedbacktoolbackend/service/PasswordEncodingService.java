@@ -24,6 +24,10 @@ public class PasswordEncodingService {
      */
     public PasswordEncodingService() {
         passwordEncoder = new BCryptPasswordEncoder();
+        /**
+         * Regex Explanation:
+         * String contains at least one special character from a defined set and one alphanumeric character, with a minimum length of 8 characters.
+         */
         passwordRegex = "^(?=.*[!@#$%^&*()-_=+\\\\|\\[{\\]}])(?=.*[a-zA-Z0-9]).{8,}$";
 
     }
@@ -46,6 +50,11 @@ public class PasswordEncodingService {
         if (password.length() < 8) {
             throw new CustomHttpException(HttpStatus.BAD_REQUEST, "The password doesn't meet the required length");
         }
+        // The following regular expression checks if the password contains at least one special character.
+/**
+ * Regex Explanation:
+ * String must contain at least one special character from a defined set, allowing any characters before and after it
+ */
         if (!password.matches(".*[!@#$%^&*()_+{}|:\"<>?,./;'\\[\\]`~].*")) {
             throw new CustomHttpException(HttpStatus.BAD_REQUEST, "The Password should have at least 1 special character");
         }
