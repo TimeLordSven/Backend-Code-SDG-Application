@@ -8,7 +8,7 @@ public class UserBusiness {
     private String prefixes;
     private String lastName;
     private String email;
-    private final String password;
+    private String password;
     private Role role;
 
     public Long getId() {
@@ -77,6 +77,9 @@ public class UserBusiness {
         this.id = id;
     }
 
+    public UserBusiness(String email) {
+        this.email = email;
+    }
     /**
      * Checks if the stored email is valid using a regex pattern.
      *
