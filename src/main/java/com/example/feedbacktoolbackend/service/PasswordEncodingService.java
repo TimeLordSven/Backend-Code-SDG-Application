@@ -61,7 +61,8 @@ public class PasswordEncodingService {
         if (password.contains(" ")) {
             throw new CustomHttpException(HttpStatus.BAD_REQUEST, "The Password can't contain any spaces");
         }
-        if (!password.equals(verifyPassword)) {
+
+        if (!new BCryptPasswordEncoder().matches(password, verifyPassword)) {
             throw new CustomHttpException(HttpStatus.BAD_REQUEST, "Passwords do not match");
         }
     }
