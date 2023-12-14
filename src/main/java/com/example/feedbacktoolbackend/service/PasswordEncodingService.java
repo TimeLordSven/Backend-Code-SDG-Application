@@ -32,7 +32,6 @@ public class PasswordEncodingService {
         passwordRegex = "^(?=.*[!@#$%^&*()-_=+\\\\|\\[{\\]}])(?=.*[a-zA-Z0-9]).{8,}$";
 
     }
-
     /**
      * Validates the password against various criteria.
      *
@@ -45,7 +44,7 @@ public class PasswordEncodingService {
         if (password == null || verifyPassword == null) {
         throw new CustomHttpException(HttpStatus.BAD_REQUEST, "Input can't be empty.");
     }
-        if (!new BCryptPasswordEncoder().matches(password, verifyPassword)) {
+        if (!passwordEncoder.matches(password, verifyPassword)) {
         throw new CustomHttpException(HttpStatus.UNAUTHORIZED, "The email and password do not match.");
     }
 }
