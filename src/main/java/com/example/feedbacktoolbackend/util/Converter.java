@@ -1,4 +1,7 @@
 package com.example.feedbacktoolbackend.util;
+/*
+  @Author Sven Molenaar
+ */
 
 import com.example.feedbacktoolbackend.data.Models.Session;
 import com.example.feedbacktoolbackend.data.Models.User;
@@ -8,6 +11,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Converter {
+    /**
+     * Converts a UserBusiness object to a User entity.
+     *
+     * @param userBusiness UserBusiness object to convert
+     * @return User entity
+     * @author Sven Molenaar
+     */
     public User convertToDataEntity(UserBusiness userBusiness) {
         User user = new User();
         user.setId(userBusiness.getId());
@@ -20,6 +30,13 @@ public class Converter {
         return user;
     }
 
+    /**
+     * Converts a User entity to a UserBusiness object.
+     *
+     * @param userEntity User entity to convert
+     * @return UserBusiness object
+     * @author Sven Molenaar
+     */
     public UserBusiness convertToBusinessModel(User userEntity) {
         return new UserBusiness(
                 userEntity.getId(),
@@ -32,6 +49,13 @@ public class Converter {
         );
     }
 
+    /**
+     * Converts a Session entity to a SessionBusiness object.
+     *
+     * @param sessionEntity Session entity to convert
+     * @return SessionBusiness object
+     * @author Sven Molenaar
+     */
     public SessionBusiness convertToBusinessModel(Session sessionEntity) {
         return new SessionBusiness(
                 sessionEntity.getSessionId().toString(),

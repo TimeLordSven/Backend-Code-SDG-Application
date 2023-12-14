@@ -1,4 +1,7 @@
 package com.example.feedbacktoolbackend;
+/*
+  @Author Sven Molenaar
+ */
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
