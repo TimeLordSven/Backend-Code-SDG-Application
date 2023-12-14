@@ -47,8 +47,6 @@ class SessionControllerTest {
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(Map.of("message", "Successful login"), response.getBody());
-
-        // Verify that the cookie is added with the expected parameters
         verify(httpServletResponse, times(1)).addCookie(any(Cookie.class));
     }
 
