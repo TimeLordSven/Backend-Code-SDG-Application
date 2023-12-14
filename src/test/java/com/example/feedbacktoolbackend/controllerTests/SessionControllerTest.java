@@ -1,5 +1,7 @@
 package com.example.feedbacktoolbackend.controllerTests;
-
+/*
+  @Author Sven Molenaar
+ */
 
 import com.example.feedbacktoolbackend.controller.SessionController;
 import com.example.feedbacktoolbackend.controller.dto.LoginDTO;
@@ -38,6 +40,11 @@ class SessionControllerTest {
     }
 
     @Test
+    /**
+     * Tests a successful login scenario.
+     * Mocks the SessionService to return a session ID and verifies the response.
+     * @author Sven Molenaar
+     */
     void testLogin_Successful() throws CustomHttpException, InvalidInputException {
         LoginDTO loginDTO = new LoginDTO("username", "password");
         String sessionId = "someSessionId";
@@ -51,6 +58,11 @@ class SessionControllerTest {
     }
 
     @Test
+    /**
+     * Verifies the behavior when a CustomHttpException is thrown during login.
+     * Checks if the appropriate status code and message are returned.
+     * @author Sven Molenaar
+     */
     void testLogin_CustomHttpException() throws CustomHttpException, InvalidInputException {
         LoginDTO loginDTO = new LoginDTO("invalid_username", "password");
         CustomHttpException customHttpException = new CustomHttpException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
@@ -63,6 +75,11 @@ class SessionControllerTest {
     }
 
     @Test
+    /**
+     * Tests the case where an InvalidInputException is thrown during login.
+     * Ensures the correct status code and error message are returned.
+     * @author Sven Molenaar
+     */
     void testLogin_InvalidInputException() throws CustomHttpException, InvalidInputException {
         LoginDTO loginDTO = new LoginDTO(null, "password");
         InvalidInputException invalidInputException = new InvalidInputException("Invalid input");

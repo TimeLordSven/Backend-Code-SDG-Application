@@ -1,5 +1,7 @@
 package com.example.feedbacktoolbackend.serviceTests;
-
+/*
+  @Author Sven Molenaar
+ */
 
 import com.example.feedbacktoolbackend.controller.SessionController;
 import com.example.feedbacktoolbackend.controller.dto.LoginDTO;

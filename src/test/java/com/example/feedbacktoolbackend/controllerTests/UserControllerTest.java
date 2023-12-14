@@ -1,4 +1,7 @@
 package com.example.feedbacktoolbackend.controllerTests;
+/*
+  @Author Sven Molenaar
+ */
 
 import com.example.feedbacktoolbackend.controller.UserController;
 import com.example.feedbacktoolbackend.controller.dto.RegistrationDTO;
