@@ -27,7 +27,7 @@ class PasswordEncodingServiceTest {
     @Test
     void validatePassword_LengthBelowRequirement_ShouldThrowHttpException() {
         assertThrows(CustomHttpException.class, () -> {
-            passwordEncodingService.validatePassword("pass", "pass");
+            passwordEncodingService.validateInputPasswordRegister("pass", "pass");
         });
     }
 
@@ -39,7 +39,7 @@ class PasswordEncodingServiceTest {
     @Test
     void validatePassword_NoSpecialCharacter_ShouldThrowHttpException() {
         assertThrows(CustomHttpException.class, () -> {
-            passwordEncodingService.validatePassword("Password123", "Password123");
+            passwordEncodingService.validateInputPasswordRegister("Password123", "Password123");
         });
     }
 
@@ -51,7 +51,7 @@ class PasswordEncodingServiceTest {
     @Test
     void validatePassword_ContainsSpace_ShouldThrowHttpException() {
         assertThrows(CustomHttpException.class, () -> {
-            passwordEncodingService.validatePassword("Pass word123!", "Pass word123!");
+            passwordEncodingService.validateInputPasswordRegister("Pass word123!", "Pass word123!");
         });
     }
 
@@ -63,7 +63,7 @@ class PasswordEncodingServiceTest {
     @Test
     void validatePassword_PasswordsDoNotMatch_ShouldThrowHttpException() {
         assertThrows(CustomHttpException.class, () -> {
-            passwordEncodingService.validatePassword("Password123!", "Password321!");
+            passwordEncodingService.validateInputPasswordRegister("Password123!", "Password321!");
         });
     }
 

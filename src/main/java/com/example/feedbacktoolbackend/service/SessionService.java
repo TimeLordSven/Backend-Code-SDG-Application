@@ -132,7 +132,7 @@ public class SessionService {
      * @author Sven Molenaar
      */
     private void validatePassword(UserBusiness userBusiness, String rawPassword) {
-        passwordEncodingService.validatePassword(rawPassword, userBusiness.getPassword());
+        passwordEncodingService.validateLoginCredentials(rawPassword, userBusiness.getPassword());
     }
 
     /**

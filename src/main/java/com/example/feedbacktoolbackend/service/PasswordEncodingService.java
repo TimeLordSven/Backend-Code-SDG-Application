@@ -4,6 +4,7 @@ package com.example.feedbacktoolbackend.service;
  *
  * @author Sven Molenaar
  */
+
 import com.example.feedbacktoolbackend.controller.exception.CustomHttpException;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
@@ -40,7 +41,24 @@ public class PasswordEncodingService {
      * @throws CustomHttpException When the validation fails
      * @author Sven Molenaar
      */
-    public void validatePassword(String password, String verifyPassword) {
+    public void validateLoginCredentials(String password, String verifyPassword) {
+        if (password == null || verifyPassword == null) {
+        throw new CustomHttpException(HttpStatus.BAD_REQUEST, "Input can not be empty Please try again.");
+    }
+        if (!new BCryptPasswordEncoder().matches(password, verifyPassword)) {
+        throw new CustomHttpException(HttpStatus.BAD_REQUEST, "Invalid password e-mail.");
+    }
+}
+
+    /**
+     * Validates the password against various criteria.
+     *
+     * @param password       The password to validate
+     * @param verifyPassword The verification of the password
+     * @throws CustomHttpException When the validation fails
+     * @author Sven Molenaar
+     */
+    public void validateInputPasswordRegister(String password, String verifyPassword) {
         if (password == null) {
             throw new CustomHttpException(HttpStatus.BAD_REQUEST, "The password can not be null");
         }
@@ -50,7 +68,6 @@ public class PasswordEncodingService {
         if (password.length() < 8) {
             throw new CustomHttpException(HttpStatus.BAD_REQUEST, "The password doesn't meet the required length");
         }
-        // The following regular expression checks if the password contains at least one special character.
 /**
  * Regex Explanation:
  * String must contain at least one special character from a defined set, allowing any characters before and after it
@@ -61,8 +78,7 @@ public class PasswordEncodingService {
         if (password.contains(" ")) {
             throw new CustomHttpException(HttpStatus.BAD_REQUEST, "The Password can't contain any spaces");
         }
-
-        if (!new BCryptPasswordEncoder().matches(password, verifyPassword)) {
+        if (!(password.equals(verifyPassword))) {
             throw new CustomHttpException(HttpStatus.BAD_REQUEST, "Passwords do not match");
         }
     }
@@ -90,6 +106,4 @@ public class PasswordEncodingService {
         return password.matches(passwordRegex);
     }
 }
-
-
 

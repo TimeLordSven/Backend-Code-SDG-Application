@@ -47,7 +47,7 @@ public class UserService {
     }
 
     public void validatePasswords(String password, String verifyPassword) {
-        passwordEncoderService.validatePassword(password, verifyPassword);
+        passwordEncoderService.validateInputPasswordRegister(password, verifyPassword);
     }
 
     /**
