@@ -118,7 +118,7 @@ public class SessionService {
     private UserBusiness getUserByEmail(String email) {
         User userEntity = userRepository.getUserByEmail(email);
         if (userEntity == null) {
-            throw new CustomHttpException(HttpStatus.UNAUTHORIZED, "Unauthorized");
+            throw new CustomHttpException(HttpStatus.UNAUTHORIZED, "The email and password do not match");
         }
         return converter.convertToBusinessModel(userEntity);
     }
