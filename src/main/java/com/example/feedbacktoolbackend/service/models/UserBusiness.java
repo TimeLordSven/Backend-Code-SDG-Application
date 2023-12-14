@@ -1,4 +1,7 @@
 package com.example.feedbacktoolbackend.service.models;
+/*
+  @Author Sven Molenaar
+ */
 
 import com.example.feedbacktoolbackend.enums.Role;
 
@@ -8,7 +11,7 @@ public class UserBusiness {
     private String prefixes;
     private String lastName;
     private String email;
-    private final String password;
+    private String password;
     private Role role;
 
     public Long getId() {
@@ -75,6 +78,10 @@ public class UserBusiness {
     public UserBusiness(Long id, String firstName, String prefixes, String lastName, String email, String password, Role role) {
         this(firstName, prefixes, lastName, email, password, role);
         this.id = id;
+    }
+
+    public UserBusiness(String email) {
+        this.email = email;
     }
 
     /**

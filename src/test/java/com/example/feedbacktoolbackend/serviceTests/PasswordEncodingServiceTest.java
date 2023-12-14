@@ -1,6 +1,6 @@
 package com.example.feedbacktoolbackend.serviceTests;
 /*
-  @Author Sven Molenaar
+  @author Sven Molenaar
  */
 
 import com.example.feedbacktoolbackend.controller.exception.CustomHttpException;
@@ -21,46 +21,56 @@ class PasswordEncodingServiceTest {
 
     /**
      * Validates that a password below the required length throws a CustomHttpException.
+     *
+     * @author Sven Molenaar
      */
     @Test
     void validatePassword_LengthBelowRequirement_ShouldThrowHttpException() {
         assertThrows(CustomHttpException.class, () -> {
-            passwordEncodingService.validatePassword("pass", "pass");
+            passwordEncodingService.validateInputPasswordRegister("pass", "pass");
         });
     }
 
     /**
      * Validates that a password without special characters throws a CustomHttpException.
+     *
+     * @author Sven Molenaar
      */
     @Test
     void validatePassword_NoSpecialCharacter_ShouldThrowHttpException() {
         assertThrows(CustomHttpException.class, () -> {
-            passwordEncodingService.validatePassword("Password123", "Password123");
+            passwordEncodingService.validateInputPasswordRegister("Password123", "Password123");
         });
     }
 
     /**
      * Validates that a password containing spaces throws a CustomHttpException.
+     *
+     * @author Sven Molenaar
      */
     @Test
     void validatePassword_ContainsSpace_ShouldThrowHttpException() {
         assertThrows(CustomHttpException.class, () -> {
-            passwordEncodingService.validatePassword("Pass word123!", "Pass word123!");
+            passwordEncodingService.validateInputPasswordRegister("Pass word123!", "Pass word123!");
         });
     }
 
     /**
      * Validates that non-matching passwords throw a CustomHttpException.
+     *
+     * @author Sven Molenaar
      */
     @Test
     void validatePassword_PasswordsDoNotMatch_ShouldThrowHttpException() {
         assertThrows(CustomHttpException.class, () -> {
-            passwordEncodingService.validatePassword("Password123!", "Password321!");
+            passwordEncodingService.validateInputPasswordRegister("Password123!", "Password321!");
         });
     }
 
     /**
      * Verifies that the encodePassword method returns an encoded password.
+     *
+     * @author Sven Molenaar
      */
     @Test
     void encodePassword_ShouldReturnEncodedPassword() {
@@ -73,6 +83,8 @@ class PasswordEncodingServiceTest {
 
     /**
      * Validates that a valid password passes the validatePassword method.
+     *
+     * @author Sven Molenaar
      */
     @Test
     void validatePassword_validatePassword_ValidPassword_ShouldReturnTrue() {
