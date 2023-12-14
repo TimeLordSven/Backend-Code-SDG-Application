@@ -103,7 +103,7 @@ public class SessionService {
      */
     private void validateEmail(UserBusiness userBusiness) {
         if (!userBusiness.hasValidEmail()) {
-            throw new CustomHttpException(HttpStatus.BAD_REQUEST, "Email is invalid");
+            throw new CustomHttpException(HttpStatus.BAD_REQUEST, "The Email is not valid");
         }
     }
 

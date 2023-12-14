@@ -43,10 +43,10 @@ public class PasswordEncodingService {
      */
     public void validateLoginCredentials(String password, String verifyPassword) {
         if (password == null || verifyPassword == null) {
-        throw new CustomHttpException(HttpStatus.BAD_REQUEST, "Input can not be empty Please try again.");
+        throw new CustomHttpException(HttpStatus.BAD_REQUEST, "Input can't be empty.");
     }
         if (!new BCryptPasswordEncoder().matches(password, verifyPassword)) {
-        throw new CustomHttpException(HttpStatus.BAD_REQUEST, "Invalid password e-mail.");
+        throw new CustomHttpException(HttpStatus.UNAUTHORIZED, "The email and password do not match.");
     }
 }
 
