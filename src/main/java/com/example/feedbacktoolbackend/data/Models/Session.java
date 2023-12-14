@@ -1,5 +1,7 @@
 package com.example.feedbacktoolbackend.data.Models;
-
+/*
+  @Author Sven Molenaar
+ */
 
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;

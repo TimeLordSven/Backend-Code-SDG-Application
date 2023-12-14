@@ -16,6 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
+/**
+ * Controller handling session-related endpoints.
+ *
+ * @author Sven Molenaar
+ */
 @RestController
 @RequestMapping("/sessions")
 public class SessionController {
@@ -26,6 +31,14 @@ public class SessionController {
         this.sessionService = sessionService;
     }
 
+    /**
+     * Endpoint for user login.
+     *
+     * @param loginDTO Login credentials provided in the request body
+     * @param response HttpServletResponse used to add the session cookie
+     * @return ResponseEntity containing the status of the login operation
+     * @author Sven Molenaar
+     */
     @PostMapping
     public ResponseEntity<Object> login(@RequestBody LoginDTO loginDTO, HttpServletResponse response) {
         try {
