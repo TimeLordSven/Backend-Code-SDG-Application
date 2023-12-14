@@ -1,6 +1,6 @@
 package com.example.feedbacktoolbackend.controller;
 
-import com.example.feedbacktoolbackend.controller.dto.RegistrationDTO;
+import com.example.feedbacktoolbackend.controller.dto.LoginDTO;
 import com.example.feedbacktoolbackend.controller.exception.CustomHttpException;
 import com.example.feedbacktoolbackend.controller.exception.InvalidInputException;
 import com.example.feedbacktoolbackend.service.SessionService;
@@ -27,9 +27,9 @@ public class SessionController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> login(@RequestBody RegistrationDTO registrationDTO, HttpServletResponse response) {
+    public ResponseEntity<Object> login(@RequestBody LoginDTO loginDTO, HttpServletResponse response) {
         try {
-            String sessionId = sessionService.login(registrationDTO);
+            String sessionId = sessionService.login(loginDTO);
 
             int twoWeeksInSeconds = 1_209_600;
 

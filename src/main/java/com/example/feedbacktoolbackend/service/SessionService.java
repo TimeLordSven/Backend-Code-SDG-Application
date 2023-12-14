@@ -1,5 +1,6 @@
 package com.example.feedbacktoolbackend.service;
 
+import com.example.feedbacktoolbackend.controller.dto.LoginDTO;
 import com.example.feedbacktoolbackend.controller.dto.RegistrationDTO;
 import com.example.feedbacktoolbackend.controller.exception.CustomHttpException;
 import com.example.feedbacktoolbackend.data.SessionRepository;
@@ -31,31 +32,32 @@ public class SessionService {
         this.converter = converter;
     }
 
-    public String login(RegistrationDTO registrationDTO) {
+    public String login(LoginDTO loginDTO) {
         try {
-            validateRegistrationDTO(registrationDTO);
+            validateAuthenticationDTO(loginDTO);
 
-            UserBusiness user = retrieveUserForAuthentication(registrationDTO);
-            validatePassword(user, registrationDTO.password());
+            UserBusiness user = retrieveUserForAuthentication(loginDTO);
+            validatePassword(user, loginDTO.password());
 
             SessionBusiness sessionBusiness = createSession(user);
             return sessionBusiness.getSessionId();
         } catch (CustomHttpException e) {
-            throw e;
+            // Handle CustomHttpException
+            // Depending on your logic, you might want to return a specific value or re-throw the exception
+            throw e; // Re-throwing the exception
         } catch (Exception e) {
             throw new CustomHttpException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error");
         }
     }
 
-
-    private void validateRegistrationDTO(RegistrationDTO dto) {
+    private void validateAuthenticationDTO(LoginDTO dto) {
         if (dto.email() == null || dto.email().isBlank() || dto.password() == null || dto.password().isBlank()) {
             throw new CustomHttpException(HttpStatus.BAD_REQUEST, "Input cannot be empty");
         }
     }
 
-    private UserBusiness retrieveUserForAuthentication(RegistrationDTO registrationDTO) {
-        UserBusiness user = new UserBusiness(registrationDTO.email());
+    private UserBusiness retrieveUserForAuthentication(LoginDTO loginDTO) {
+        UserBusiness user = new UserBusiness(loginDTO.email());
         validateEmail(user);
         return getUserByEmail(user.getEmail());
     }
