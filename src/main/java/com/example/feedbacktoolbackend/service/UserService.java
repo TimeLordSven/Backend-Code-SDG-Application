@@ -1,4 +1,7 @@
 package com.example.feedbacktoolbackend.service;
+/*
+  @Author Sven Molenaar
+ */
 
 import com.example.feedbacktoolbackend.controller.dto.RegistrationDTO;
 import com.example.feedbacktoolbackend.controller.exception.AlreadyExistsException;
@@ -13,13 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-
 @Service
 @Transactional
 public class UserService {
     private final PasswordEncodingService passwordEncoderService;
     private final UserRepository repository;
-
 
     @Autowired
     public UserService(PasswordEncodingService passwordEncoderService, UserRepository repository) {

@@ -1,16 +1,16 @@
 package com.example.feedbacktoolbackend.service;
-
+/**
+ * Service class responsible for password encoding, matching, and validation using BCrypt.
+ *
+ * @author Sven Molenaar
+ */
 import com.example.feedbacktoolbackend.controller.exception.CustomHttpException;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-/**
- * Service class responsible for password encoding, matching, and validation using BCrypt.
- *
- * @author Sven Molenaar
- */
+
 @Service
 @Transactional
 public class PasswordEncodingService {
@@ -44,7 +44,7 @@ public class PasswordEncodingService {
         if (password == null) {
             throw new CustomHttpException(HttpStatus.BAD_REQUEST, "The password can not be null");
         }
-        if (verifyPassword== null) {
+        if (verifyPassword == null) {
             throw new CustomHttpException(HttpStatus.BAD_REQUEST, "The password can not be null");
         }
         if (password.length() < 8) {

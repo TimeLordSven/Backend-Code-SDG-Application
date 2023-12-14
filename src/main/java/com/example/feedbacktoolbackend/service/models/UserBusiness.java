@@ -1,4 +1,7 @@
 package com.example.feedbacktoolbackend.service.models;
+/*
+  @Author Sven Molenaar
+ */
 
 import com.example.feedbacktoolbackend.enums.Role;
 
@@ -80,6 +83,7 @@ public class UserBusiness {
     public UserBusiness(String email) {
         this.email = email;
     }
+
     /**
      * Checks if the stored email is valid using a regex pattern.
      *

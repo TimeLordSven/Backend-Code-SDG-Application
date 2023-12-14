@@ -1,5 +1,7 @@
 package com.example.feedbacktoolbackend.service.models;
-
+/*
+  @Author Sven Molenaar
+ */
 
 import java.util.Date;
 
