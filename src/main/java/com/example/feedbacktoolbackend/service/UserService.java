@@ -1,20 +1,17 @@
 package com.example.feedbacktoolbackend.service;
-/*
-  @Author Sven Molenaar
- */
 
 import com.example.feedbacktoolbackend.controller.dto.RegistrationDTO;
 import com.example.feedbacktoolbackend.controller.exception.AlreadyExistsException;
 import com.example.feedbacktoolbackend.controller.exception.CustomHttpException;
 import com.example.feedbacktoolbackend.controller.exception.InvalidInputException;
-import com.example.feedbacktoolbackend.data.UserRepository;
 import com.example.feedbacktoolbackend.data.Models.User;
+import com.example.feedbacktoolbackend.data.UserRepository;
 import com.example.feedbacktoolbackend.enums.Role;
 import com.example.feedbacktoolbackend.service.models.UserBusiness;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
@@ -24,98 +21,34 @@ public class UserService {
 
     @Autowired
     public UserService(PasswordEncodingService passwordEncoderService, UserRepository repository) {
-
         this.passwordEncoderService = passwordEncoderService;
         this.repository = repository;
     }
 
     /**
-     * Creates a new user based on the provided authentication data.
-     * Validates input and checks for existing users before creation.
+     * Creates a new user based on the provided registration data.
      *
-     * @param registrationDTO Authentication data to create a user
+     * @param registrationDTO Registration data to create a user
      * @return UserBusiness object representing the created user
-     * @throws AlreadyExistsException if a user with the provided email already exists
-     * @throws InvalidInputException  if input data is invalid or doesn't match criteria
      * @author Sven Molenaar
      */
-    public UserBusiness createUser(RegistrationDTO registrationDTO) throws AlreadyExistsException, InvalidInputException, CustomHttpException {
+    public UserBusiness createUser(RegistrationDTO registrationDTO) {
         validatePasswords(registrationDTO.password(), registrationDTO.verifyPassword());
         UserBusiness userBusiness = createUserBusinessFromDTO(registrationDTO);
         validateUser(userBusiness);
         return convertToUserBusiness(repository.save(convertToUserEntity(userBusiness)));
     }
 
+    /**
+     * Validates the passwords during user creation.
+     *
+     * @param password       Password provided during registration
+     * @param verifyPassword Password verification provided during registration
+     * @author Sven Molenaar
+     */
     public void validatePasswords(String password, String verifyPassword) {
         passwordEncoderService.validateInputPasswordRegister(password, verifyPassword);
     }
-
-    /**
-     * Validates the given name against various criteria.
-     *
-     * @param name      The name to validate
-     * @param fieldName The name of the field being validated
-     * @throws CustomHttpException When the validation fails
-     * @author Sven Molenaar
-     */
-
-    private void validateName(String name, String fieldName) throws CustomHttpException {
-        if (name == null || name.isEmpty()) {
-            throw new CustomHttpException(HttpStatus.BAD_REQUEST, fieldName + " cannot be null or an empty string");
-        }
-
-        if (name.length() < 2) {
-            throw new CustomHttpException(HttpStatus.BAD_REQUEST, fieldName + " should be at least 1 character long");
-        }
-
-        if (name.length() > 50) {
-            throw new CustomHttpException(HttpStatus.BAD_REQUEST, fieldName + " cannot be longer than 50 characters");
-        }
-
-        if (name.contains(" ")) {
-            throw new CustomHttpException(HttpStatus.BAD_REQUEST, fieldName + " cannot contain spaces");
-        }
-
-        if (!name.matches("^[a-zA-Z]+$")) {
-            throw new CustomHttpException(HttpStatus.BAD_REQUEST, fieldName + " can only contain alphabetic characters");
-        }
-    }
-
-    /**
-     * Creates a UserBusiness object from the provided RegistrationDTO.
-     *
-     * @param registrationDTO The DTO containing user registration details
-     * @return UserBusiness object created from the DTO
-     * @throws CustomHttpException When the input is invalid
-     * @author Sven Molenaar
-     */
-    private UserBusiness createUserBusinessFromDTO(RegistrationDTO registrationDTO) throws CustomHttpException {
-        String firstName = registrationDTO.firstName();
-        String prefixes = registrationDTO.prefixes();
-        String lastName = registrationDTO.lastName();
-        String email = registrationDTO.email();
-        String password = passwordEncoderService.encodePassword(registrationDTO.password());
-        Role role = Role.STUDENT;
-
-        validateName(firstName, "First name");
-        validateName(lastName, "Last name");
-        /**
-         * Regex Explanation
-         * String only contains alphabetic characters, regardless of case.
-         */
-        if (prefixes != null && !prefixes.isEmpty() && !prefixes.matches("^[a-zA-Z]+$")) {
-            throw new CustomHttpException(HttpStatus.BAD_REQUEST, "Prefix can only contain alphabetic characters");
-        }
-
-        UserBusiness userBusiness = new UserBusiness(firstName, prefixes, lastName, email, password, role);
-
-        if (!userBusiness.hasValidEmail()) {
-            throw new CustomHttpException(HttpStatus.BAD_REQUEST, userBusiness.getEmail() + " is not a valid email");
-        }
-
-        return userBusiness;
-    }
-
 
     /**
      * Validates if a user with the same email already exists.
@@ -126,7 +59,7 @@ public class UserService {
      */
     private void validateUser(UserBusiness userBusiness) throws CustomHttpException {
         if (repository.existsByEmail(userBusiness.getEmail())) {
-            throw new CustomHttpException(HttpStatus.CONFLICT, " E-mail is already taken");
+            throw new CustomHttpException(HttpStatus.CONFLICT, "E-mail is already taken");
         }
     }
 
@@ -135,9 +68,13 @@ public class UserService {
      *
      * @param userBusiness UserBusiness object to convert
      * @return User entity
+     * @throws IllegalArgumentException if the provided User entity is null
      * @author Sven Molenaar
      */
     private User convertToUserEntity(UserBusiness userBusiness) {
+        if (userBusiness == null) {
+            throw new IllegalArgumentException("UserBusiness is null");
+        }
         User user = new User();
         user.setId(userBusiness.getId());
         user.setFirstName(userBusiness.getFirstName());
@@ -170,5 +107,26 @@ public class UserService {
                 userEntity.getPassword(),
                 userEntity.getRole()
         );
+    }
+
+    /**
+     * Creates a UserBusiness object from the provided RegistrationDTO.
+     *
+     * @param registrationDTO The DTO containing user registration details
+     * @return UserBusiness object created from the DTO
+     * @throws CustomHttpException When the input is invalid
+     * @author Sven Molenaar
+     */
+    private UserBusiness createUserBusinessFromDTO(RegistrationDTO registrationDTO) throws CustomHttpException {
+        UserBusiness userBusiness = new UserBusiness(
+                registrationDTO.firstName(),
+                registrationDTO.prefixes(),
+                registrationDTO.lastName(),
+                registrationDTO.email(),
+                passwordEncoderService.encodePassword(registrationDTO.password()),
+                Role.STUDENT
+        );
+
+        return userBusiness;
     }
 }
