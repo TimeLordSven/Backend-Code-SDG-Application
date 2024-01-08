@@ -30,16 +30,13 @@ public record RegistrationDTO(
         @NotNull(message = "Password cannot be null")
         @NotEmpty(message = "Password cannot be empty")
         @Size(min = 8, max = 255, message = "Password should be between 8 and 255 characters long")
-        @Pattern.List({
-                @Pattern(regexp = ".*[!@#$%^&*()_+{}|:\"<>?,./;'\\[\\]`~].*", message = "Password must contain at least one special character")
-        })
+        @Pattern(regexp = ".*[!@#$%^&*()_+{}|:\"<>?,./;'\\[\\]`~].*", message = "Password must contain at least one special character")
         String password,
+
         @NotNull(message = "Verify password cannot be null")
         @NotEmpty(message = "Verify password cannot be empty")
         @Size(min = 8, max = 255, message = "Verify password should be between 8 and 255 characters long")
-        @Pattern.List({
-                @Pattern(regexp = ".*[!@#$%^&*()_+{}|:\"<>?,./;'\\[\\]`~].*", message = "Verify password must contain at least one special character")
-        })
+        @Pattern(regexp = ".*[!@#$%^&*()_+{}|:\"<>?,./;'\\[\\]`~].*", message = "Verify password must contain at least one special character")
         String verifyPassword
 ) {
 
