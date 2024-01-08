@@ -8,6 +8,7 @@ import com.example.feedbacktoolbackend.controller.exception.CustomHttpException;
 import com.example.feedbacktoolbackend.data.Models.User;
 import com.example.feedbacktoolbackend.data.UserRepository;
 import com.example.feedbacktoolbackend.enums.Role;
+import com.example.feedbacktoolbackend.util.factory.UserFactory;
 import com.example.feedbacktoolbackend.service.models.UserBusiness;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,11 +20,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
     private final PasswordEncodingService passwordEncoderService;
     private final UserRepository repository;
+    private final UserFactory userFactory;
 
     @Autowired
-    public UserService(PasswordEncodingService passwordEncoderService, UserRepository repository) {
+    public UserService(PasswordEncodingService passwordEncoderService, UserRepository repository, UserFactory userFactory) {
         this.passwordEncoderService = passwordEncoderService;
         this.repository = repository;
+        this.userFactory = userFactory;
     }
 
     /**
@@ -88,7 +91,7 @@ public class UserService {
     }
 
     /**
-     * Converts a User entity to a UserBusiness object.
+     * Converts a User entity to a UserBusiness object using UserFactory.
      *
      * @param userEntity User entity to convert
      * @return UserBusiness object
@@ -99,15 +102,7 @@ public class UserService {
         if (userEntity == null) {
             throw new IllegalArgumentException("UserEntity is null");
         }
-        return new UserBusiness(
-                userEntity.getId(),
-                userEntity.getFirstName(),
-                userEntity.getPrefixes(),
-                userEntity.getLastName(),
-                userEntity.getEmail(),
-                userEntity.getPassword(),
-                userEntity.getRole()
-        );
+        return userFactory.convertToBusinessModel(userEntity);
     }
 
     /**

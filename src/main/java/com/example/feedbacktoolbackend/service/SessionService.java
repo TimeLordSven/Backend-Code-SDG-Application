@@ -1,17 +1,18 @@
 package com.example.feedbacktoolbackend.service;
 /**
-  @author Sven Molenaar
+ * @author Sven Molenaar
  */
 
 import com.example.feedbacktoolbackend.controller.dto.LoginDTO;
 import com.example.feedbacktoolbackend.controller.exception.CustomHttpException;
-import com.example.feedbacktoolbackend.data.SessionRepository;
-import com.example.feedbacktoolbackend.data.UserRepository;
 import com.example.feedbacktoolbackend.data.Models.Session;
 import com.example.feedbacktoolbackend.data.Models.User;
+import com.example.feedbacktoolbackend.data.SessionRepository;
+import com.example.feedbacktoolbackend.data.UserRepository;
+import com.example.feedbacktoolbackend.util.factory.UserFactory;
 import com.example.feedbacktoolbackend.service.models.SessionBusiness;
 import com.example.feedbacktoolbackend.service.models.UserBusiness;
-import com.example.feedbacktoolbackend.util.Converter;
+import com.example.feedbacktoolbackend.util.factory.SessionFactory;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,18 +30,18 @@ import org.springframework.stereotype.Service;
  * @author Sven Molenaar
  */
 public class SessionService {
-    private final PasswordEncodingService passwordEncodingService;
     private final UserRepository userRepository;
     private final SessionRepository sessionRepository;
-    private final Converter converter;
+    private final SessionFactory sessionFactory;
+    private final UserFactory userFactory;
 
     @Autowired
     public SessionService(PasswordEncodingService passwordEncodingService, UserRepository userRepository,
-                          SessionRepository sessionRepository, Converter converter) {
-        this.passwordEncodingService = passwordEncodingService;
+                          SessionRepository sessionRepository, SessionFactory sessionFactory, UserFactory userFactory) {
         this.userRepository = userRepository;
         this.sessionRepository = sessionRepository;
-        this.converter = converter;
+        this.sessionFactory = sessionFactory;
+        this.userFactory = userFactory;
     }
 
     /**
@@ -89,11 +90,11 @@ public class SessionService {
         if (userEntity == null) {
             throw new CustomHttpException(HttpStatus.UNAUTHORIZED, "The email and password do not match");
         }
-        return converter.convertToBusinessModel(userEntity);
+        return userFactory.convertToBusinessModel(userEntity);
     }
 
     /**
-     * Creates a session for the authenticated user.
+     * Creates a session for the authenticated user using SessionFactory.
      *
      * @param userBusiness UserBusiness object
      * @return SessionBusiness object representing the created session
@@ -101,8 +102,8 @@ public class SessionService {
      */
     private SessionBusiness createSession(UserBusiness userBusiness) {
         Session session = new Session();
-        session.setUser(converter.convertToDataEntity(userBusiness));
+        session.setUser(userFactory.convertToDataEntity(userBusiness));
         sessionRepository.save(session);
-        return converter.convertToBusinessModel(session);
+        return sessionFactory.convertToBusinessModel(session);
     }
 }
