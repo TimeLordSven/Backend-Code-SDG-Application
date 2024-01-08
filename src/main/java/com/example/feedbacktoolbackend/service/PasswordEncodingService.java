@@ -1,4 +1,7 @@
 package com.example.feedbacktoolbackend.service;
+/**
+ @author Sven Molenaar
+ */
 
 import com.example.feedbacktoolbackend.controller.exception.CustomHttpException;
 import org.springframework.http.HttpStatus;

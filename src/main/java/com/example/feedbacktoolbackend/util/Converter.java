@@ -1,6 +1,6 @@
 package com.example.feedbacktoolbackend.util;
-/*
-  @Author Sven Molenaar
+/**
+  @author Sven Molenaar
  */
 
 import com.example.feedbacktoolbackend.data.Models.Session;

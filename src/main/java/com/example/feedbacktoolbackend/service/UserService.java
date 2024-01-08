@@ -1,9 +1,10 @@
 package com.example.feedbacktoolbackend.service;
+/**
+ * @author Sven Molenaar
+ */
 
 import com.example.feedbacktoolbackend.controller.dto.RegistrationDTO;
-import com.example.feedbacktoolbackend.controller.exception.AlreadyExistsException;
 import com.example.feedbacktoolbackend.controller.exception.CustomHttpException;
-import com.example.feedbacktoolbackend.controller.exception.InvalidInputException;
 import com.example.feedbacktoolbackend.data.Models.User;
 import com.example.feedbacktoolbackend.data.UserRepository;
 import com.example.feedbacktoolbackend.enums.Role;

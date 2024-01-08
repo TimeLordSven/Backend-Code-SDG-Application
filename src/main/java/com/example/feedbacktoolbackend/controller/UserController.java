@@ -1,4 +1,7 @@
 package com.example.feedbacktoolbackend.controller;
+/**
+ * @author Sven Molenaar
+ */
 
 import com.example.feedbacktoolbackend.controller.dto.RegistrationDTO;
 import com.example.feedbacktoolbackend.controller.exception.CustomHttpException;
@@ -16,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -55,8 +57,6 @@ public class UserController {
 
         return new ResponseEntity<>(Map.of("message", errorMessage), HttpStatus.BAD_REQUEST);
     }
-
-
 
 
 }

@@ -1,6 +1,6 @@
 package com.example.feedbacktoolbackend.service.models;
-/*
-  @Author Sven Molenaar
+/**
+ * @author Sven Molenaar
  */
 
 import com.example.feedbacktoolbackend.enums.Role;
