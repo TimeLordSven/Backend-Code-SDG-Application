@@ -66,7 +66,14 @@ class SessionServiceTest {
         ResponseEntity<Object> responseEntity = sessionController.login(loginDTO, response);
 
         assertEquals(HttpStatus.UNAUTHORIZED, responseEntity.getStatusCode());
-        assertEquals("The email and password do not match", ((Map<?, ?>) responseEntity.getBody()).get("message"));
+
+        Object responseBody = responseEntity.getBody();
+        assertNotNull(responseBody);
+        if (responseBody instanceof Map) {
+            assertEquals("The email and password do not match", ((Map<?, ?>) responseBody).get("message"));
+        } else {
+            fail("Unexpected response body type");
+        }
     }
 
     @Test
@@ -80,7 +87,14 @@ class SessionServiceTest {
         ResponseEntity<Object> responseEntity = sessionController.login(loginDTO, response);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-        assertEquals("Input cannot be empty", ((Map<?, ?>) responseEntity.getBody()).get("message"));
+
+        Object responseBody = responseEntity.getBody();
+        assertNotNull(responseBody);
+        if (responseBody instanceof Map) {
+            assertEquals("Input cannot be empty", ((Map<?, ?>) responseBody).get("message"));
+        } else {
+            fail("Unexpected response body type");
+        }
     }
 
     @Test
@@ -94,7 +108,14 @@ class SessionServiceTest {
         ResponseEntity<Object> responseEntity = sessionController.login(loginDTO, response);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-        assertEquals("The email is not valid", ((Map<?, ?>) responseEntity.getBody()).get("message"));
+
+        Object responseBody = responseEntity.getBody();
+        assertNotNull(responseBody);
+        if (responseBody instanceof Map) {
+            assertEquals("The email is not valid", ((Map<?, ?>) responseBody).get("message"));
+        } else {
+            fail("Unexpected response body type");
+        }
     }
 
     @Test
