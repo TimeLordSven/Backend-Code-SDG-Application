@@ -56,5 +56,8 @@ public class UserFactory {
                 Role.STUDENT
         );
     }
+    public UserBusiness createBusinessModel(User userEntity) {
+        return new UserBusiness(userEntity.getId(), userEntity.getFirstName(), userEntity.getPrefixes(), userEntity.getLastName(), userEntity.getEmail(), userEntity.getPassword(), userEntity.getRole());
+    }
 }
 

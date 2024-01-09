@@ -4,6 +4,7 @@ package com.example.feedbacktoolbackend.service;
  */
 
 import com.example.feedbacktoolbackend.controller.dto.LoginDTO;
+import com.example.feedbacktoolbackend.controller.exception.AuthorisationException;
 import com.example.feedbacktoolbackend.controller.exception.CustomHttpException;
 import com.example.feedbacktoolbackend.data.Models.Session;
 import com.example.feedbacktoolbackend.data.Models.User;
@@ -17,6 +18,9 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
+
 
 @Service
 @Transactional
@@ -105,5 +109,33 @@ public class SessionService {
         session.setUser(userFactory.convertToDataEntity(userBusiness));
         sessionRepository.save(session);
         return sessionFactory.convertToBusinessModel(session);
+    }
+
+    /**
+     * Authorizes a user based on the provided session ID.
+     *
+     * @param sessionId The session ID used for authorization.
+     * @return A UserBusiness instance authorized via the provided session ID.
+     * @throws AuthorisationException If an invalid session ID or unauthorized access occurs.
+     * @author Sven Molenaar
+     */
+    public UserBusiness authoriseBySessionId(String sessionId) throws AuthorisationException {
+        try {
+            SessionBusiness sessionBusiness = getSessionBySessionId(sessionId);
+            return sessionBusiness.getUser();
+        } catch (IllegalArgumentException e) {
+            throw new AuthorisationException("Invalid session ID");
+        }
+    }
+
+    /**
+     * Retrieves a SessionBusiness model based on the provided session ID.
+     *
+     * @param sessionId The session ID used to fetch the SessionBusiness model.
+     * @return A SessionBusiness instance fetched by the session ID.
+     * @author Sven Molenaar
+     */
+    private SessionBusiness getSessionBySessionId(String sessionId) {
+        return sessionFactory.createBusinessModel(sessionRepository.getReferenceById(UUID.fromString(sessionId)));
     }
 }

@@ -21,7 +21,7 @@ public class UserServiceTest {
     private UserService userService;
 
     @Test
-    @Description("Tests successful registration with valid user details.")
+    @Description("Successful registration with valid user details")
     void testRegistrationValidEverything() {
         RegistrationDTO dto = new RegistrationDTO(
                 "Abraham",
@@ -37,7 +37,7 @@ public class UserServiceTest {
 
 
     @Test
-    @Description("Tests registration failure due to an invalid password.")
+    @Description("Registration failure due to an invalid password")
     void testRegistrationInvalidPassword() {
         RegistrationDTO registrationDTO = new RegistrationDTO(
                 "Abraham",
@@ -51,7 +51,7 @@ public class UserServiceTest {
     }
 
     @Test
-    @Description("Checks if the verified password is invalid")
+    @Description("Invalid verified password during registration")
     void testRegistrationInvalidVerifyPassword() {
         RegistrationDTO registrationDTO = new RegistrationDTO(
                 "Abraham",

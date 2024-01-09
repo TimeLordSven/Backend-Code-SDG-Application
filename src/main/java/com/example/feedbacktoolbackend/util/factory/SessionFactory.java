@@ -30,4 +30,14 @@ public class SessionFactory {
                 sessionEntity.getCreatedAt()
         );
     }
+    /**
+     * Creates a SessionBusiness model based on the provided Session entity.
+     *
+     * @param sessionEntity The Session entity used to create the SessionBusiness model.
+     * @return A SessionBusiness instance created from the Session entity.
+     * @author Sven Molenaar
+     */
+    public SessionBusiness createBusinessModel(Session sessionEntity) {
+        return new SessionBusiness(sessionEntity.getSessionId().toString(), userFactory.createBusinessModel(sessionEntity.getUser()), sessionEntity.getCreatedAt());
+    }
 }
