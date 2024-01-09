@@ -1,7 +1,4 @@
 package com.example.feedbacktoolbackend.controller;
-/**
- * @author Sven Molenaar
- */
 
 import com.example.feedbacktoolbackend.controller.dto.RegistrationDTO;
 import com.example.feedbacktoolbackend.controller.exception.CustomHttpException;
@@ -21,6 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
+/**
+ * Controller handling user-related endpoints for students.
+ * Manages user creation and validation operations.
+ *
+ * @author Sven Molenaar
+ */
 @RestController
 @RequestMapping("/users/students")
 @Validated
@@ -32,6 +35,15 @@ public class UserController {
         this.userService = userService;
     }
 
+    /**
+     * Endpoint for creating a new user (student).
+     *
+     * @param requestBody The RegistrationDTO containing user details in the request body
+     * @return ResponseEntity containing the status of the user creation operation
+     * @throws InvalidInputException If invalid input data is encountered during user creation
+     * @throws CustomHttpException   If a custom HTTP exception occurs during user creation
+     * @author Sven Molenaar
+     */
     @PostMapping
     public ResponseEntity<Object> createUser(@RequestBody @Valid RegistrationDTO requestBody) {
         try {
@@ -46,6 +58,13 @@ public class UserController {
         }
     }
 
+    /**
+     * Exception handler for handling validation errors in the request body.
+     *
+     * @param ex The MethodArgumentNotValidException thrown during validation failure
+     * @return ResponseEntity containing the error message for the validation failure
+     * @author Sven Molenaar
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handleValidationExceptions(MethodArgumentNotValidException ex) {
         FieldError fieldError = ex.getBindingResult().getFieldErrors().stream().findFirst().orElse(null);
@@ -57,6 +76,4 @@ public class UserController {
 
         return new ResponseEntity<>(Map.of("message", errorMessage), HttpStatus.BAD_REQUEST);
     }
-
-
 }
