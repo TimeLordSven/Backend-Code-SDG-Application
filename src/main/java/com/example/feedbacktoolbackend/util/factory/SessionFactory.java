@@ -3,7 +3,7 @@ package com.example.feedbacktoolbackend.util.factory;
  * @author Sven Molenaar
  */
 
-import com.example.feedbacktoolbackend.data.Models.Session;
+import com.example.feedbacktoolbackend.data.models.Session;
 import com.example.feedbacktoolbackend.service.models.SessionBusiness;
 import org.springframework.stereotype.Component;
 

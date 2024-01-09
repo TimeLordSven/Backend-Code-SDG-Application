@@ -1,4 +1,4 @@
-package com.example.feedbacktoolbackend.data.Models;
+package com.example.feedbacktoolbackend.data.models;
 /*
   @Author Sven Molenaar
  */
