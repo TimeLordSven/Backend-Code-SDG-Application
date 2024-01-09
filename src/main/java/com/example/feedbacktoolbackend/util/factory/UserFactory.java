@@ -3,20 +3,25 @@ package com.example.feedbacktoolbackend.util.factory;
  * @author Sven Molenaar
  */
 
+import com.example.feedbacktoolbackend.controller.dto.RegistrationDTO;
+import com.example.feedbacktoolbackend.controller.exception.CustomHttpException;
 import com.example.feedbacktoolbackend.data.Models.User;
+import com.example.feedbacktoolbackend.enums.Role;
+import com.example.feedbacktoolbackend.service.PasswordEncodingService;
 import com.example.feedbacktoolbackend.service.models.UserBusiness;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserFactory {
 
-    /**
-     * Converts a User entity to a UserBusiness object.
-     *
-     * @param userEntity User entity to convert
-     * @return UserBusiness object
-     * @author Sven Molenaar
-     */
+    private final PasswordEncodingService passwordEncoderService;
+
+    @Autowired
+    public UserFactory(PasswordEncodingService passwordEncoderService) {
+        this.passwordEncoderService = passwordEncoderService;
+    }
+
     public UserBusiness convertToBusinessModel(User userEntity) {
         return new UserBusiness(
                 userEntity.getId(),
@@ -29,13 +34,6 @@ public class UserFactory {
         );
     }
 
-    /**
-     * Converts a UserBusiness object to a User entity.
-     *
-     * @param userBusiness UserBusiness object to convert
-     * @return User entity representing the converted UserBusiness
-     * @author Sven Molenaar
-     */
     public User convertToDataEntity(UserBusiness userBusiness) {
         User userEntity = new User();
         userEntity.setId(userBusiness.getId());
@@ -48,5 +46,15 @@ public class UserFactory {
         return userEntity;
     }
 
-
+    public UserBusiness createUserBusinessFromDTO(RegistrationDTO registrationDTO) throws CustomHttpException {
+        return new UserBusiness(
+                registrationDTO.firstName(),
+                registrationDTO.prefixes(),
+                registrationDTO.lastName(),
+                registrationDTO.email(),
+                passwordEncoderService.encodePassword(registrationDTO.password()),
+                Role.STUDENT
+        );
+    }
 }
+
