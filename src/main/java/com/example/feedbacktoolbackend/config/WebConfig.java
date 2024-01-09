@@ -16,15 +16,15 @@ import java.util.List;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    private final AuthorisationArgumentResolver authorizationArgumentResolver;
+    private final AuthorisationArgumentResolver authorisationArgumentResolver;
 
     /**
      * Constructor to initialize the WebConfig with an AuthorisationArgumentResolver.
-     * @param authorizationArgumentResolver The AuthorisationArgumentResolver instance to be used.
+     * @param authorisationArgumentResolver The AuthorisationArgumentResolver instance to be used.
      * @author Sven Molenaar
      */
-    public WebConfig(AuthorisationArgumentResolver authorizationArgumentResolver) {
-        this.authorizationArgumentResolver = authorizationArgumentResolver;
+    public WebConfig(AuthorisationArgumentResolver authorisationArgumentResolver) {
+        this.authorisationArgumentResolver = authorisationArgumentResolver;
     }
 
     /**
@@ -34,7 +34,7 @@ public class WebConfig implements WebMvcConfigurer {
      */
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-        argumentResolvers.add(authorizationArgumentResolver);
+        argumentResolvers.add(authorisationArgumentResolver);
     }
 }
 
