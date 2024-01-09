@@ -1,4 +1,4 @@
-package com.example.feedbacktoolbackend.data.Models;
+package com.example.feedbacktoolbackend.data.models;
 
 import com.example.feedbacktoolbackend.enums.Role;
 import jakarta.persistence.*;
