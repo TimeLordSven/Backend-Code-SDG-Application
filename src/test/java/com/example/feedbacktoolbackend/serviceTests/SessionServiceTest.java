@@ -5,8 +5,10 @@ package com.example.feedbacktoolbackend.serviceTests;
 
 import com.example.feedbacktoolbackend.controller.SessionController;
 import com.example.feedbacktoolbackend.controller.dto.LoginDTO;
+import com.example.feedbacktoolbackend.controller.exception.AuthorisationException;
 import com.example.feedbacktoolbackend.controller.exception.CustomHttpException;
 import com.example.feedbacktoolbackend.service.SessionService;
+import com.example.feedbacktoolbackend.service.models.UserBusiness;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +21,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
@@ -40,7 +42,7 @@ class SessionServiceTest {
     }
 
     @Test
-    void login_SuccessfulLogin_Returns200AndCookie() {
+    void testSuccessfulLogin_Returns200AndCookie() {
         LoginDTO loginDTO = new LoginDTO(
                 "VanHelsing@Hva.com",
                 "Password123!"
@@ -54,12 +56,10 @@ class SessionServiceTest {
     }
 
     @Test
-    void login_WrongPassword_Returns401WithError() {
+    void testWrongPassword_Returns401WithError() {
         LoginDTO loginDTO = new LoginDTO(
-
                 "VanHelsing@Hva.com",
                 "WrongPassword123!"
-
         );
         when(sessionService.login(loginDTO)).thenThrow(new CustomHttpException(HttpStatus.UNAUTHORIZED, "The email and password do not match"));
 
@@ -70,9 +70,8 @@ class SessionServiceTest {
     }
 
     @Test
-    void login_EmptyInput_Returns400WithError() {
+    void testEmptyInput_Returns400WithError() {
         LoginDTO loginDTO = new LoginDTO(
-
                 "",
                 ""
         );
@@ -85,9 +84,8 @@ class SessionServiceTest {
     }
 
     @Test
-    void login_InvalidEmail_Returns400WithError() {
+    void testInvalidEmail_Returns400WithError() {
         LoginDTO loginDTO = new LoginDTO(
-
                 "VanHelsingHva.com",
                 "Password123!"
         );
@@ -98,5 +96,27 @@ class SessionServiceTest {
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
         assertEquals("The email is not valid", ((Map<?, ?>) responseEntity.getBody()).get("message"));
     }
+
+    @Test
+    void testValidSession_ReturnsAuthorizedUser() {
+        String validSessionId = "validSessionId";
+        UserBusiness mockUserBusiness = new UserBusiness("mockUser");
+
+        when(sessionService.authoriseBySessionId(validSessionId)).thenReturn(mockUserBusiness);
+
+        UserBusiness authorizedUser = sessionService.authoriseBySessionId(validSessionId);
+
+        assertEquals(mockUserBusiness, authorizedUser);
+    }
+
+    @Test
+    void testInvalidSession_ThrowsAuthorisationException() {
+        String invalidSessionId = "invalidSessionId";
+
+        when(sessionService.authoriseBySessionId(invalidSessionId)).thenThrow(new AuthorisationException("Invalid session ID"));
+
+        assertThrows(AuthorisationException.class, () -> sessionService.authoriseBySessionId(invalidSessionId));
+    }
+
 }
 
