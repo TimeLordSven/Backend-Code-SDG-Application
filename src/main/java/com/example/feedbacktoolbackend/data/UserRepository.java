@@ -1,6 +1,6 @@
 package com.example.feedbacktoolbackend.data;
 
-import com.example.feedbacktoolbackend.data.Models.User;
+import com.example.feedbacktoolbackend.data.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

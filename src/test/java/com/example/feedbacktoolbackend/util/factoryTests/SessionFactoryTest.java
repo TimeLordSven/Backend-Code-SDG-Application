@@ -4,7 +4,7 @@ package com.example.feedbacktoolbackend.util.factoryTests;
  * @author Sven Molenaar
  */
 
-import com.example.feedbacktoolbackend.data.Models.Session;
+import com.example.feedbacktoolbackend.data.models.Session;
 import com.example.feedbacktoolbackend.service.models.SessionBusiness;
 import com.example.feedbacktoolbackend.util.factory.SessionFactory;
 import com.example.feedbacktoolbackend.util.factory.UserFactory;

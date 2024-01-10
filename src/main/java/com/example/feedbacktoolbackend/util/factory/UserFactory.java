@@ -5,7 +5,7 @@ package com.example.feedbacktoolbackend.util.factory;
 
 import com.example.feedbacktoolbackend.controller.dto.RegistrationDTO;
 import com.example.feedbacktoolbackend.controller.exception.CustomHttpException;
-import com.example.feedbacktoolbackend.data.Models.User;
+import com.example.feedbacktoolbackend.data.models.User;
 import com.example.feedbacktoolbackend.enums.Role;
 import com.example.feedbacktoolbackend.service.PasswordEncodingService;
 import com.example.feedbacktoolbackend.service.models.UserBusiness;
@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserFactory {
+public class UserFactory implements ModelFactory<UserBusiness, User>{
 
     private final PasswordEncodingService passwordEncoderService;
 

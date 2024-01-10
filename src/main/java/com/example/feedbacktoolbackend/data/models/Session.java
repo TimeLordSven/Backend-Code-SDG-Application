@@ -1,4 +1,4 @@
-package com.example.feedbacktoolbackend.data.Models;
+package com.example.feedbacktoolbackend.data.models;
 /*
   @Author Sven Molenaar
  */
@@ -22,6 +22,14 @@ public class Session {
     private User user;
     @CreatedDate
     private Date createdAt;
+
+    public Session() {
+    }
+
+    public Session(User user, Date createdAt) {
+        this.user = user;
+        this.createdAt = createdAt;
+    }
 
     public UUID getSessionId() {
         return sessionId;
