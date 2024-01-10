@@ -7,16 +7,16 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 import java.lang.annotation.Annotation;
-
+/**
+ * BaseRoleValidator is an abstract class implementing ConstraintValidator for role-based validation.
+ * Extend this class to create specific role validators.
+ * @param <T> The annotation type for validation
+ * @author Sven Molenaar
+ */
 public abstract class BaseRoleValidator<T extends Annotation> implements ConstraintValidator<T, UserBusiness> {
     protected Role expectedRole;
 
-    /**
-     * Calls the abstract initializeRole method before validating
-     *
-     * @param annotation annotation instance for a given constraint declaration
-     * @author Anish Raghoenath
-     */
+
     @Override
     public void initialize(T annotation) {
         this.initializeRole();
@@ -24,14 +24,6 @@ public abstract class BaseRoleValidator<T extends Annotation> implements Constra
 
     abstract public void initializeRole();
 
-    /**
-     * Validates the targets role
-     *
-     * @param value   object to validate
-     * @param context context in which the constraint is evaluated
-     * @return true if it has the correct role
-     * @author Anish Raghoenath
-     */
     @Override
     public boolean isValid(UserBusiness value, ConstraintValidatorContext context) {
         return value.hasRole(expectedRole);
