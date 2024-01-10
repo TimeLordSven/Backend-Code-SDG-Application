@@ -6,7 +6,6 @@ package com.example.feedbacktoolbackend.service;
 import com.example.feedbacktoolbackend.controller.dto.LoginDTO;
 import com.example.feedbacktoolbackend.controller.exception.AuthorisationException;
 import com.example.feedbacktoolbackend.controller.exception.CustomHttpException;
-import com.example.feedbacktoolbackend.data.models.Session;
 import com.example.feedbacktoolbackend.data.models.User;
 import com.example.feedbacktoolbackend.data.SessionRepository;
 import com.example.feedbacktoolbackend.data.UserRepository;
@@ -108,7 +107,7 @@ public class SessionService {
      */
     private SessionBusiness createSession(UserBusiness userBusiness) {
         SessionBusiness session = new SessionBusiness(null, userBusiness, Date.from(Instant.now()));
-        session = sessionFactory.createBusinessModel(sessionRepository.save(sessionFactory.createDataEntity(session)));
+        session = sessionFactory.createBusinessModel(sessionRepository.save(sessionFactory.convertToDataEntity(session)));
         return session;
     }
 

@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserFactory {
+public class UserFactory implements ModelFactory<UserBusiness, User>{
 
     private final PasswordEncodingService passwordEncoderService;
 

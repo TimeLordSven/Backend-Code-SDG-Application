@@ -41,7 +41,7 @@ public class SessionFactory implements ModelFactory<SessionBusiness, Session> {
         return new SessionBusiness(sessionEntity.getSessionId().toString(), userFactory.createBusinessModel(sessionEntity.getUser()), sessionEntity.getCreatedAt());
     }
 
-    public Session createDataEntity(SessionBusiness sessionBusiness) {
+    public Session convertToDataEntity(SessionBusiness sessionBusiness) {
         return new Session(userFactory.convertToDataEntity(sessionBusiness.getUser()), sessionBusiness.getCreatedAt());
     }
 }
