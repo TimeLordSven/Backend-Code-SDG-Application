@@ -8,7 +8,7 @@ import com.example.feedbacktoolbackend.service.models.SessionBusiness;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SessionFactory {
+public class SessionFactory implements ModelFactory<SessionBusiness, Session> {
     private final UserFactory userFactory;
 
     public SessionFactory(UserFactory userFactory) {
@@ -39,5 +39,9 @@ public class SessionFactory {
      */
     public SessionBusiness createBusinessModel(Session sessionEntity) {
         return new SessionBusiness(sessionEntity.getSessionId().toString(), userFactory.createBusinessModel(sessionEntity.getUser()), sessionEntity.getCreatedAt());
+    }
+
+    public Session createDataEntity(SessionBusiness sessionBusiness) {
+        return new Session(userFactory.convertToDataEntity(sessionBusiness.getUser()), sessionBusiness.getCreatedAt());
     }
 }

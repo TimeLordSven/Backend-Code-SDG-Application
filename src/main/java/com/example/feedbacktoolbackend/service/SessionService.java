@@ -19,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.UUID;
 
 
@@ -105,10 +107,9 @@ public class SessionService {
      * @author Sven Molenaar
      */
     private SessionBusiness createSession(UserBusiness userBusiness) {
-        Session session = new Session();
-        session.setUser(userFactory.convertToDataEntity(userBusiness));
-        sessionRepository.save(session);
-        return sessionFactory.convertToBusinessModel(session);
+        SessionBusiness session = new SessionBusiness(null, userBusiness, Date.from(Instant.now()));
+        session = sessionFactory.createBusinessModel(sessionRepository.save(sessionFactory.createDataEntity(session)));
+        return session;
     }
 
     /**
