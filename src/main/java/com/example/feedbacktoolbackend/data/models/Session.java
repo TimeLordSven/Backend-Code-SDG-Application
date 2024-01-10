@@ -23,6 +23,14 @@ public class Session {
     @CreatedDate
     private Date createdAt;
 
+    public Session() {
+    }
+
+    public Session(User user, Date createdAt) {
+        this.user = user;
+        this.createdAt = createdAt;
+    }
+
     public UUID getSessionId() {
         return sessionId;
     }
