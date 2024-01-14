@@ -67,6 +67,6 @@ public class AssignmentService {
      * @author Sven Molenaar
      */
     private AssignmentBusiness saveAssignment(AssignmentBusiness assignmentBusiness) {
-        return assignmentFactory.createBusinessModel(assignmentRepository.save(assignmentFactory.convertToDataEntity(assignmentBusiness)));
+        return assignmentFactory.createBusinessModel(assignmentRepository.save(assignmentFactory.createDataEntity(assignmentBusiness)));
     }
 }

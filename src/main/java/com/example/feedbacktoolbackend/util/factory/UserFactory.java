@@ -34,7 +34,7 @@ public class UserFactory implements ModelFactory<UserBusiness, User>{
         );
     }
 
-    public User convertToDataEntity(UserBusiness userBusiness) {
+    public User createDataEntity(UserBusiness userBusiness) {
         User userEntity = new User();
         userEntity.setId(userBusiness.getId());
         userEntity.setFirstName(userBusiness.getFirstName());
@@ -56,6 +56,7 @@ public class UserFactory implements ModelFactory<UserBusiness, User>{
                 Role.STUDENT
         );
     }
+
     public UserBusiness createBusinessModel(User userEntity) {
         return new UserBusiness(userEntity.getId(), userEntity.getFirstName(), userEntity.getPrefixes(), userEntity.getLastName(), userEntity.getEmail(), userEntity.getPassword(), userEntity.getRole());
     }
