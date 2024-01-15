@@ -3,64 +3,124 @@ package com.example.feedbacktoolbackend.controllerTests;
  * @author Sven Molenaar
  */
 
-import com.example.feedbacktoolbackend.controller.AssignmentController;
 import com.example.feedbacktoolbackend.controller.dto.AssignmentDTO;
-import com.example.feedbacktoolbackend.controller.exception.AuthorisationException;
-import com.example.feedbacktoolbackend.enums.Role;
-import com.example.feedbacktoolbackend.service.AssignmentService;
-import com.example.feedbacktoolbackend.service.models.UserBusiness;
+import com.example.feedbacktoolbackend.controller.dto.LoginDTO;
+import com.example.feedbacktoolbackend.controller.dto.RegistrationDTO;
+import com.example.feedbacktoolbackend.service.SessionService;
+import com.example.feedbacktoolbackend.service.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.Cookie;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+    @SpringBootTest
+    @AutoConfigureMockMvc
+    public class AssignmentControllerTest {
+        @Autowired
+        private MockMvc mockMvc;
 
-class AssignmentControllerTest {
-    @Mock
-    private AssignmentService assignmentService;
+        @Autowired
+        private ObjectMapper objectMapper;
 
-    @InjectMocks
-    private AssignmentController assignmentController;
+        @Autowired
+        private UserService userService;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
+        @Autowired
+        private SessionService sessionService;
+
+        private final String VALID_PASSWORD = "TestPassword1!*";
+        private final String VALID_EMAIL = "VanHelsingTestAssignment@hva.nl";
+
+
+        @BeforeEach
+        void setUp() {
+            RegistrationDTO validUser = new RegistrationDTO("Bob", "", "Hofman", VALID_EMAIL, VALID_PASSWORD, VALID_PASSWORD);
+            userService.createUser(validUser);
+        }
+
+        @Test
+        @Transactional
+        @Rollback
+        void testIfTooSmallTitleAndValidSessionIdReturns400Error() throws Exception {
+            String invalidTitle = "a";
+            AssignmentDTO dto = new AssignmentDTO(null, invalidTitle, "Valid description", "Valid Cheat sheet", "12-12-2024");
+            LoginDTO validAuth = new LoginDTO(VALID_EMAIL, VALID_PASSWORD);
+            String sessionId = sessionService.login(validAuth);
+
+            mockMvc.perform(MockMvcRequestBuilders
+                            .post("/assignments")
+                            .content(objectMapper.writeValueAsString(dto))
+                            .cookie(new Cookie("session_id", sessionId))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .accept(MediaType.APPLICATION_JSON))
+                    .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Title must be between 2 and 255 characters"));
+        }
+
+        @Test
+        @Transactional
+        @Rollback
+        void testIfTooBigTitleAndValidSessionIdReturns400Error() throws Exception {
+            int maxStringLength = 256;
+            String invalidTitle = "a".repeat(maxStringLength);
+            AssignmentDTO dto = new AssignmentDTO(null, invalidTitle, "Valid description", "Valid Cheat sheet", "12-12-2024");
+            LoginDTO validAuth = new LoginDTO(VALID_EMAIL, VALID_PASSWORD);
+            String sessionId = sessionService.login(validAuth);
+
+            mockMvc.perform(MockMvcRequestBuilders
+                            .post("/assignments")
+                            .content(objectMapper.writeValueAsString(dto))
+                            .cookie(new Cookie("session_id", sessionId))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .accept(MediaType.APPLICATION_JSON))
+                    .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Title must be between 2 and 255 characters"));
+        }
+
+        @Test
+        @Transactional
+        @Rollback
+        void testIfEmptyTitleAndValidSessionIdReturns400Error() throws Exception {
+            String invalidTitle = null;
+            AssignmentDTO dto = new AssignmentDTO(null, null, "Valid description", "Valid Cheat sheet", "12-12-2024");
+            LoginDTO validAuth = new LoginDTO(VALID_EMAIL, VALID_PASSWORD);
+            String sessionId = sessionService.login(validAuth);
+
+            mockMvc.perform(MockMvcRequestBuilders
+                            .post("/assignments")
+                            .content(objectMapper.writeValueAsString(dto))
+                            .cookie(new Cookie("session_id", sessionId))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .accept(MediaType.APPLICATION_JSON))
+                    .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Title can't be empty"));
+        }
+
+        @Test
+        @Transactional
+        @Rollback
+        void testIfValidTitleAndInvalidSessionIdReturns401Error() throws Exception {
+            AssignmentDTO dto = new AssignmentDTO(null, "Valid Title", "Valid description", "Valid Cheat sheet", "12-12-2024");
+            LoginDTO validAuth = new LoginDTO(VALID_EMAIL, VALID_PASSWORD);
+
+            mockMvc.perform(MockMvcRequestBuilders
+                            .post("/assignments")
+                            .content(objectMapper.writeValueAsString(dto))
+                            .cookie(new Cookie("session_id", ""))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .accept(MediaType.APPLICATION_JSON))
+                    .andExpect(MockMvcResultMatchers.status().isUnauthorized())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Invalid Cookies"));
+        }
     }
 
-
-    @Test
-    void testCreateAssignment_Successful() {
-        AssignmentDTO assignmentDTO = new AssignmentDTO(1, "Assignment", "Description", "CheatSheet", "2024-01-10");
-        UserBusiness teacher = new UserBusiness(1L, "Abraham", "Van", "Helsing", "VanHelsing@hva.nl", "Password1!", Role.TEACHER);
-
-        when(assignmentService.createAssignment(any(AssignmentDTO.class), any(UserBusiness.class))).thenReturn(1);
-
-        ResponseEntity<Map<String, ?>> response = assignmentController.createAssignment(assignmentDTO, teacher);
-
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals(Map.of("message", "Successfully created", "assignmentId", 1), response.getBody());
-        verify(assignmentService, times(1)).createAssignment(assignmentDTO, teacher);
-    }
-
-    @Test
-    void testCreateAssignment_Unauthorized() {
-        AssignmentDTO assignmentDTO = new AssignmentDTO(1, "Assignment", "Description", "CheatSheet", "2024-01-10");
-        UserBusiness teacher = new UserBusiness(1L, "Abraham", "Van", "Helsing", "VanHelsing@hva.nl", "Password1!", Role.TEACHER);
-
-        doThrow(new AuthorisationException("Invalid Session")).when(assignmentService).createAssignment(any(AssignmentDTO.class), any(UserBusiness.class));
-
-        ResponseEntity<Map<String, ?>> response = assignmentController.createAssignment(assignmentDTO, teacher);
-
-        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
-        assertEquals(Map.of("message", "Invalid Session"), response.getBody());
-        verify(assignmentService, times(1)).createAssignment(assignmentDTO, teacher);
-    }
-}

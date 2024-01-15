@@ -25,7 +25,7 @@ public class AssignmentServiceTest {
 
     @Test
     public void succesfullReturnAssignmentTitleTest() {
-        RegistrationDTO registrationUser = new RegistrationDTO("Abraham", "Van", "Helsing", "VanHelsing@hva.nl", "Password1!", "Password1!");
+        RegistrationDTO registrationUser = new RegistrationDTO("Abraham", "Van", "Helsing", "VanHelsing1@hva.nl", "Password1!", "Password1!");
         UserBusiness validTeacher = userService.createUser(registrationUser);
 
         AssignmentDTO dto = new AssignmentDTO(null, "Good Example Title", "Good Exampledescription", "Good Example cheat sheet", "08-06-2025");
@@ -37,7 +37,7 @@ public class AssignmentServiceTest {
 
     @Test
     public void succesfullReturnAssignmentIdTest() {
-        RegistrationDTO registrationUser = new RegistrationDTO("Abraham", "Van", "Helsing", "VanHelsing@hva.nl", "Password1!", "Password1!");
+        RegistrationDTO registrationUser = new RegistrationDTO("Abraham", "Van", "Helsing", "VanHelsin1g@hva.nl", "Password1!", "Password1!");
         UserBusiness validTeacher = userService.createUser(registrationUser);
 
         AssignmentDTO dto = new AssignmentDTO(null, "Good Example Title", "Good Example description", "Good Example cheat sheet", "05-08-2024");
