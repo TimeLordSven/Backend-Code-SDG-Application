@@ -15,21 +15,7 @@ public class SessionFactory implements ModelFactory<SessionBusiness, Session> {
         this.userFactory = userFactory;
     }
 
-    /**
-     * Converts a Session entity to a SessionBusiness object.
-     *
-     * @param sessionEntity Session entity to convert
-     * @return SessionBusiness object
-     * @author Sven Molenaar
-     */
-    public SessionBusiness convertToBusinessModel(Session sessionEntity) {
-        return new SessionBusiness(
-                sessionEntity.getSessionId().toString(),
 
-                userFactory.convertToBusinessModel(sessionEntity.getUser()),
-                sessionEntity.getCreatedAt()
-        );
-    }
     /**
      * Creates a SessionBusiness model based on the provided Session entity.
      *
@@ -41,7 +27,7 @@ public class SessionFactory implements ModelFactory<SessionBusiness, Session> {
         return new SessionBusiness(sessionEntity.getSessionId().toString(), userFactory.createBusinessModel(sessionEntity.getUser()), sessionEntity.getCreatedAt());
     }
 
-    public Session convertToDataEntity(SessionBusiness sessionBusiness) {
-        return new Session(userFactory.convertToDataEntity(sessionBusiness.getUser()), sessionBusiness.getCreatedAt());
+    public Session createDataEntity(SessionBusiness sessionBusiness) {
+        return new Session(userFactory.createDataEntity(sessionBusiness.getUser()), sessionBusiness.getCreatedAt());
     }
 }

@@ -9,6 +9,7 @@ import com.example.feedbacktoolbackend.service.models.SessionBusiness;
 import com.example.feedbacktoolbackend.util.factory.SessionFactory;
 import com.example.feedbacktoolbackend.util.factory.UserFactory;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.UUID;
 
@@ -16,7 +17,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-
+@SpringBootTest
 public class SessionFactoryTest {
 
     @Test
@@ -32,7 +33,7 @@ public class SessionFactoryTest {
 
         when(userFactory.convertToBusinessModel(sessionEntity.getUser())).thenReturn(mockSessionBusiness.getUser());
 
-        SessionBusiness result = sessionFactory.convertToBusinessModel(sessionEntity);
+        SessionBusiness result = sessionFactory.createBusinessModel(sessionEntity);
 
         assertNotNull(result);
         assertEquals(sessionId.toString(), result.getSessionId());

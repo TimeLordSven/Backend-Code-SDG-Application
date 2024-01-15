@@ -38,7 +38,7 @@ public class UserService {
         validatePasswords(registrationDTO.password(), registrationDTO.verifyPassword());
         UserBusiness userBusiness = userFactory.createUserBusinessFromDTO(registrationDTO);
         validateUser(userBusiness);
-        return userFactory.convertToBusinessModel(userFactory.convertToDataEntity(userBusiness));
+        return userFactory.convertToBusinessModel(repository.save(userFactory.createDataEntity(userBusiness)));
     }
 
     /**

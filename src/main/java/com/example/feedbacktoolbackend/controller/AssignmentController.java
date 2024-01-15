@@ -61,7 +61,7 @@ public class AssignmentController {
         try {
             Integer assignmentId = assignmentService.createAssignment(assignmentDTO, teacher);
             return new ResponseEntity<>(Map.of("message", "Successfully created", "assignmentId", assignmentId), HttpStatus.CREATED);
-        } catch (AuthorisationException authorizationException) {
+        } catch (AuthorisationException authorisationException) {
             return new ResponseEntity<>(Map.of("message", "Invalid Session"), HttpStatus.UNAUTHORIZED);
         }
     }

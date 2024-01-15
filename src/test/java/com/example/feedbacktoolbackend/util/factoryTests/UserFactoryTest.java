@@ -13,11 +13,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
-
+@SpringBootTest
 class UserFactoryTest {
 
     private UserFactory userFactory;
@@ -27,7 +28,7 @@ class UserFactoryTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         userFactory = new UserFactory(passwordEncoderService);
     }
 
@@ -55,7 +56,7 @@ class UserFactoryTest {
     void convertToDataEntityTest() {
         UserBusiness userBusiness = new UserBusiness(1L, "Abraham", "Van", "Helsing", "VanHelsing@Hva.nl", "password", Role.STUDENT);
 
-        User userEntity = userFactory.convertToDataEntity(userBusiness);
+        User userEntity = userFactory.createDataEntity(userBusiness);
 
         assertEquals(userBusiness.getId(), userEntity.getId());
         assertEquals(userBusiness.getFirstName(), userEntity.getFirstName());
@@ -66,7 +67,7 @@ class UserFactoryTest {
     }
 
     @Test
-    void createUserBusinessFromDTOTest() throws Exception {
+    void createUserBusinessFromDTOTest(){
         when(passwordEncoderService.encodePassword(anyString())).thenReturn("encodedPassword");
 
         RegistrationDTO registrationDTO = new RegistrationDTO(

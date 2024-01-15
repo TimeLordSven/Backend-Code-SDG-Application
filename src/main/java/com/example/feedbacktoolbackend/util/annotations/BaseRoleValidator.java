@@ -1,6 +1,5 @@
 package com.example.feedbacktoolbackend.util.annotations;
 
-
 import com.example.feedbacktoolbackend.enums.Role;
 import com.example.feedbacktoolbackend.service.models.UserBusiness;
 import jakarta.validation.ConstraintValidator;
@@ -14,8 +13,8 @@ import java.lang.annotation.Annotation;
  * @author Sven Molenaar
  */
 public abstract class BaseRoleValidator<T extends Annotation> implements ConstraintValidator<T, UserBusiness> {
-    protected Role expectedRole;
 
+    protected Role expectedRole;
 
     @Override
     public void initialize(T annotation) {

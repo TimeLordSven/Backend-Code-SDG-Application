@@ -35,13 +35,13 @@ public class AssignmentFactory implements ModelFactory<AssignmentBusiness, Assig
      * @return Assignment object representing the data entity
      * @author Sven Molenaar
      */
-    public Assignment convertToDataEntity(AssignmentBusiness assignmentBusiness) {
+    public Assignment createDataEntity(AssignmentBusiness assignmentBusiness) {
         return new Assignment(
                 assignmentBusiness.getTitle(),
                 assignmentBusiness.getDescription(),
                 assignmentBusiness.getTeacherCheatSheet(),
                 assignmentBusiness.getDeadline(),
-                userFactory.convertToDataEntity(assignmentBusiness.getCreatedBy())
+                userFactory.createDataEntity(assignmentBusiness.getCreatedBy())
         );
     }
 

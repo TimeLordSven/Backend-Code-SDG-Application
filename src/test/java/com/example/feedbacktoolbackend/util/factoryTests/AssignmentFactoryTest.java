@@ -40,9 +40,9 @@ class AssignmentFactoryTest {
         AssignmentBusiness assignmentBusiness = new AssignmentBusiness(
                 1, "Title", "Description", "CheatSheet", LocalDate.parse("2024-01-02"), userBusiness);
 
-        when(userFactory.convertToDataEntity(userBusiness)).thenReturn(new User());
+        when(userFactory.createDataEntity(userBusiness)).thenReturn(new User());
 
-        Assignment result = assignmentFactory.convertToDataEntity(assignmentBusiness);
+        Assignment result = assignmentFactory.createDataEntity(assignmentBusiness);
 
         assertEquals(assignmentBusiness.getTitle(), result.getTitle());
         assertEquals(assignmentBusiness.getDescription(), result.getDescription());
@@ -64,6 +64,19 @@ class AssignmentFactoryTest {
         assertEquals(assignmentDTO.title(), result.getTitle());
         assertEquals(assignmentDTO.description(), result.getDescription());
         assertEquals(assignmentDTO.teacherCheatSheet(), result.getTeacherCheatSheet());
+        assertEquals(teacher, result.getCreatedBy());
+    }
+    @Test
+    void createBusinessModelFromDTO_InvalidDate() {
+        AssignmentDTO assignmentDTO = new AssignmentDTO(1, "Title", "Description", "CheatSheet", "01-01-1999");
+
+        UserBusiness teacher = new UserBusiness(1L, "Abraham", "Van", "Helsing", "VanHelsing@hva.nl", "Password1!", Role.TEACHER);
+
+        AssignmentBusiness result = assignmentFactory.createBusinessModel(assignmentDTO, teacher);
+
+        assertEquals("Title", result.getTitle());
+        assertEquals("Description", result.getDescription());
+        assertEquals("CheatSheet", result.getTeacherCheatSheet());
         assertEquals(teacher, result.getCreatedBy());
     }
 

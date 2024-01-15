@@ -1,6 +1,6 @@
 package com.example.feedbacktoolbackend.util.factory;
 
 public interface ModelFactory<BusinessModel, DataEntity> {
-    DataEntity convertToDataEntity(BusinessModel businessModel);
+    DataEntity createDataEntity (BusinessModel businessModel);
     BusinessModel createBusinessModel(DataEntity dataEntity);
 }

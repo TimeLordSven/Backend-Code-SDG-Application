@@ -107,7 +107,7 @@ public class SessionService {
      */
     private SessionBusiness createSession(UserBusiness userBusiness) {
         SessionBusiness session = new SessionBusiness(null, userBusiness, Date.from(Instant.now()));
-        session = sessionFactory.createBusinessModel(sessionRepository.save(sessionFactory.convertToDataEntity(session)));
+        session = sessionFactory.createBusinessModel(sessionRepository.save(sessionFactory.createDataEntity(session)));
         return session;
     }
 
