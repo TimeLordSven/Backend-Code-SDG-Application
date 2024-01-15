@@ -42,7 +42,7 @@ public class SessionControllerTest {
     @Transactional
     @Rollback
     void testIfCorrectCredentialsCanLogin() throws Exception {
-        LoginDTO dto = new LoginDTO("VanHelsingTest@hva.nl", "Password1!*");
+        LoginDTO dto = new LoginDTO("VanHelsingTestSession@hva.nl", "Password1!*");
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/sessions")
@@ -58,7 +58,7 @@ public class SessionControllerTest {
     @Transactional
     @Rollback
     void testIfIncorrectEmailCanNotLogin() throws Exception {
-        LoginDTO dto = new LoginDTO("WrongVanHelsingTest@hva", "Password1!*");
+        LoginDTO dto = new LoginDTO("WrongVanHelsingTestSession@hva", "Password1!*");
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/sessions")
