@@ -28,7 +28,7 @@ public class AssignmentServiceTest {
         RegistrationDTO registrationUser = new RegistrationDTO("Abraham", "Van", "Helsing", "VanHelsing1@hva.nl", "Password1!", "Password1!");
         UserBusiness validTeacher = userService.createUser(registrationUser);
 
-        AssignmentDTO dto = new AssignmentDTO(null, "Good Example Title", "Good Exampledescription", "Good Example cheat sheet", "08-06-2025");
+        AssignmentDTO dto = new AssignmentDTO(null, "Good Example Title", "Good Example description", "Good Example cheat sheet", "08-06-2025");
 
         Integer assignmentId = assignmentService.createAssignment(dto, validTeacher);
 
@@ -48,5 +48,24 @@ public class AssignmentServiceTest {
         AssignmentBusiness assignment = assignmentService.getAssignment(assignmentId);
         assertNotNull(assignment);
         assertEquals("Good Example Title", assignment.getTitle());
+    }
+
+    @Test
+    public void invalidAssignmentDeadlineTest() {
+        RegistrationDTO registrationUser = new RegistrationDTO("Abraham", "Van", "Helsing", "VanHelsing1@hva.nl", "Password1!", "Password1!");
+        UserBusiness validTeacher = userService.createUser(registrationUser);
+
+        AssignmentDTO dto = new AssignmentDTO(null, "Good Example Title", "Good Example description", "Good Example cheat sheet", "Invalid Deadline");
+
+        assertThrows(RuntimeException.class, () -> assignmentService.createAssignment(dto, validTeacher));
+    }
+    @Test
+    public void invalidAssignmentTitleSizeTest() {
+        RegistrationDTO registrationUser = new RegistrationDTO("Abraham", "Van", "Helsing", "VanHelsing1@hva.nl", "Password1!", "Password1!");
+        UserBusiness validTeacher = userService.createUser(registrationUser);
+
+        AssignmentDTO dto = new AssignmentDTO(null, "A", "Good Example description", "Good Example cheat sheet", "08-06-2025");
+        assertNotNull(dto);
+
     }
 }
