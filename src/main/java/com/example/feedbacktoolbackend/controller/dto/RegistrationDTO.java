@@ -16,7 +16,7 @@ public record RegistrationDTO(
         @Pattern(regexp = "^\\S+$", message = "First name cannot contain spaces")
         String firstName,
 
-        @Size(min = 1, max = 50, message = "Prefixes should be between 1 and 50 characters long")
+        @Size(min = 0, max = 50, message = "Prefixes should be between 1 and 50 characters long")
         String prefixes,
 
         @NotNull(message = "Last name cannot be null")
