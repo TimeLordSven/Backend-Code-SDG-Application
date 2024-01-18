@@ -21,7 +21,7 @@ public record RegistrationDTO(
 
         @NotNull(message = "Last name cannot be null")
         @NotEmpty(message = "Last name cannot be an empty string")
-        @Size(min = 1, max = 50, message = "Last name should be between 1 and 50 characters long")
+        @Size(max = 50, message = "Last name should be between 1 and 50 characters long")
         @Pattern(regexp = "^[a-zA-Z]+$", message = "Last name can only contain alphabetic characters")
         @Pattern(regexp = "^\\S+$", message = "Last name cannot contain spaces")
         String lastName,
@@ -34,14 +34,14 @@ public record RegistrationDTO(
         @NotNull(message = "Password cannot be null")
         @NotEmpty(message = "Password cannot be empty")
         @Size(min = 8, max = 255, message = "Password should be between 8 and 255 characters long")
-        @Pattern(regexp = ".*[!@#$%^&*()_+{}|:\"<>?,./;'\\[\\]`~].*", message = "Password must contain at least one special character")
+        @Pattern(regexp = "^(?!\\s+$)(?=.*[!@#$%^&*()_+{}|:\"<>?,./;'\\[\\]`~])(?=.*\\d).*$", message = "Password must contain at least one special character and a number")
         @Pattern(regexp = "^\\S*$", message = "Password cannot contain spaces")
         String password,
 
         @NotNull(message = "Verify password cannot be null")
         @NotEmpty(message = "Verify password cannot be empty")
         @Size(min = 8, max = 255, message = "Verify password should be between 8 and 255 characters long")
-        @Pattern(regexp = ".*[!@#$%^&*()_+{}|:\"<>?,./;'\\[\\]`~].*", message = "Verify password must contain at least one special character")
+        @Pattern(regexp = "^(?!\\s+$)(?=.*[!@#$%^&*()_+{}|:\"<>?,./;'\\[\\]`~])(?=.*\\d).*$", message = "Verify password must contain at least one special character and a number")
         @Pattern(regexp = "^\\S*$", message = "Verify password cannot contain spaces")
         String verifyPassword
 ){
